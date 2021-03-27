@@ -22,7 +22,6 @@ client.on("ready", async () => {
     
     setInterval(async () => {
         const placeId = await getPlaceId(userId)
-        
         if (placeId === -1) {
             console.log("Not in a game, clearing presence.")
             await client.clearActivity()
