@@ -16,7 +16,7 @@ async function setPresence(client, placeId) {
     const profileUrl = `https://www.roblox.com/users/${userId}/profile`
     
     placeId = placeId.toString()
-    const gameLabel = gameName.length < 32 ? gameName : "Name too long, click button"
+    const gameLabel = gameName.length < 32 ? gameName : gameName.slice(0, 29) + "..."
     await client.setActivity({
         details: "Playing...",
         state: gameName,
