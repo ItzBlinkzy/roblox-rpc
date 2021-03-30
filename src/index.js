@@ -1,9 +1,9 @@
-const { clientId, cookie } = require("./config.json")
+const { clientId, cookie } = require("../config.json")
 const { app, Menu, Tray, Notification } = require("electron")
-const { getPlaceId } = require("./utils/getPlaceId")
+const { getPlaceId } = require("../utils/getPlaceId")
 const path = require("path")
-const { findRobloxInfo } = require("./utils/findRobloxInfo")
-const { setPresence } = require("./utils/setPresence")
+const { findRobloxInfo } = require("../utils/findRobloxInfo")
+const { setPresence } = require("../utils/setPresence")
 const rpc = require("discord-rpc")
 const noblox = require("noblox.js")
 
@@ -13,7 +13,7 @@ let isPlaying = false
 let lastId;
 let robloxId;
 let notInGameCount = 0
-const iconPath = path.join(__dirname, "logo.png")
+const iconPath = path.join(__dirname, "../logo.png")
 
 
 const client = new rpc.Client({
