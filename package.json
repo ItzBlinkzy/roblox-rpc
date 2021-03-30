@@ -1,8 +1,8 @@
 {
   "name": "roblox-rpc",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
