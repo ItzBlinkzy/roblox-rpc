@@ -3,4 +3,4 @@
 * [x] 2. Get userId dynamically with RoVer/Bloxlink api and client.user.id
 * [x] 3. Add a working Notification system that will notify important things concerning the roblox-rpc.
 * [ ] 4. Check for multiple processes to only keep one open at a time.
-* [ ] 5. Release executable.
+* [x] 5. Release executable.
