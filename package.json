@@ -11,7 +11,9 @@
   "build": {
     "appId": "roblox-rpc",
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "icon": "../logo.ico"
     },
     "nsis": {
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "electron": "^12.0.2",
+    "electron-builder": "^22.10.5",
     "electron-packager": "^15.2.0"
   }
 }
