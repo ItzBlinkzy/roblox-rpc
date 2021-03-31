@@ -6,10 +6,10 @@ const find = require("find-process")
 
 async function isRunning() {
     const list = await find("name", "roblox-rpc.exe", true)
-    if (!list.length) {
-        return false
+    if (list.length > 3) {
+        return true
     }
-    return true
+    return false
 }
 
 module.exports.isRunning = isRunning
