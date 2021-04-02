@@ -93,14 +93,18 @@ app.whenReady().then(async () => {
         
         tray = new Tray(iconPath)
         tray.setToolTip("ROBLOX Discord Rich Presence")
-
         const ctxMenu = await initData()
         tray.setContextMenu(ctxMenu)
-        await noblox.setCookie(cookie)
-
+        
+        tray.on("click", () => {
+            tray.popUpContextMenu(ctxMenu)
+        })
+        
         // RPC UPDATING
+        await noblox.setCookie(cookie)
         setInterval(async () => {
             const placeId = await getPlaceId(robloxId)
+            const isInDifferentGame = (lastId !== placeId)
             if (notInGameCount >= 960) {
                 new Notification({
                     title: "Not playing ROBLOX.",
@@ -123,7 +127,7 @@ app.whenReady().then(async () => {
                 isPlaying = false
             }
             
-            else if (!isPlaying && placeId !== -1 || lastId !== placeId) {
+            else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
                 console.log(placeId)
                 await setPresence(client, placeId).catch(err => console.error(err))
                 console.log("Updated presence")
@@ -150,11 +154,6 @@ app.on('window-all-closed', () => {
     }
 });
 
-app.on('second-instance', (event, commandLine, workingDirectory) => {
-    // Someone tried to run a second instance, we should focus our window.
-        console.log("Second instance open!")
-    })
-
 client.login({clientId}).catch(err => {
     new Notification({
         title: "Could not login", 
@@ -162,16 +161,3 @@ client.login({clientId}).catch(err => {
         icon: iconPath
     }).show()
 })
-// USE electron-builder instead of electron-packager possibly for auto updates stuff etcs and a better exe
-
-// https://www.npmjs.com/package/find-process check if theres more than 3 electron processes and if there is close program on start make sure its one of the first things that are checked
-
-/*
-app.on('second-instance', (event, argv, cwd) => {
-  if (window) {
-    if (window.isMinimized()) window.restore()
-    window.focus()
-  }
-})
-USE THIS^^ INSTEAD
- */
