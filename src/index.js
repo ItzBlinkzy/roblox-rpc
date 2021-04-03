@@ -89,62 +89,61 @@ app.whenReady().then(async () => {
             }).show()
         app.quit()
     }
+})
 
-
-    client.on("ready", async () => {
-        console.log("RPC Ready")
-        
-        tray = new Tray(iconPath)
-        tray.setToolTip("ROBLOX Discord Rich Presence")
-        const ctxMenu = await initData()
-        tray.setContextMenu(ctxMenu)
-        
-        tray.on("click", () => {
-            tray.popUpContextMenu(ctxMenu)
-        })
-        
-        // RPC UPDATING
-        await noblox.setCookie(cookie)
-        setInterval(async () => {
-            const placeId = await getPlaceId(robloxId)
-            const isInDifferentGame = (lastId !== placeId)
-            if (notInGameCount >= 960) {
-                new Notification({
-                    title: "Not playing ROBLOX.",
-                    body: "You have not played any ROBLOX game in the past 4 hours, roblox-rpc will automatically close in 10 seconds",
-                    closeButtonText: "Close button",
-                    timeoutType: "never",
-                    icon: iconPath
-                }).show()
-                
-                await new Promise(r => setTimeout(r, 10e3));
-                await client.destroy()
-                app.quit()
-                process.exit(1)
-            }
-
-            else if (placeId === -1) {
-                console.log("Not in a game, clearing presence.")
-                notInGameCount += 1
-                await client.clearActivity()
-                isPlaying = false
-            }
-            
-            else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
-                console.log(placeId)
-                await setPresence(client, placeId).catch(err => console.error(err))
-                console.log("Updated presence")
-
-                notInGameCount = 0
-                lastId = placeId
-                isPlaying = true
-            }
-            
-            else {
-                console.log("In a game")
-            }
-        }, 15e3)
+client.on("ready", async () => {
+    console.log("RPC Ready")
+    
+    tray = new Tray(iconPath)
+    tray.setToolTip("ROBLOX Discord Rich Presence")
+    const ctxMenu = await initData()
+    tray.setContextMenu(ctxMenu)
+    
+    tray.on("click", () => {
+        tray.popUpContextMenu(ctxMenu)
     })
+    
+    // RPC UPDATING
+    await noblox.setCookie(cookie)
+    setInterval(async () => {
+        const placeId = await getPlaceId(robloxId)
+        const isInDifferentGame = (lastId !== placeId)
+        if (notInGameCount >= 960) {
+            new Notification({
+                title: "Not playing ROBLOX.",
+                body: "You have not played any ROBLOX game in the past 4 hours, roblox-rpc will automatically close in 10 seconds",
+                closeButtonText: "Close button",
+                timeoutType: "never",
+                icon: iconPath
+            }).show()
+            
+            await new Promise(r => setTimeout(r, 10e3));
+            await client.destroy()
+            app.quit()
+            process.exit(1)
+        }
+
+        else if (placeId === -1) {
+            console.log("Not in a game, clearing presence.")
+            notInGameCount += 1
+            await client.clearActivity()
+            isPlaying = false
+        }
+        
+        else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
+            console.log(placeId)
+            await setPresence(client, placeId).catch(err => console.error(err))
+            console.log("Updated presence")
+
+            notInGameCount = 0
+            lastId = placeId
+            isPlaying = true
+        }
+        
+        else {
+            console.log("In a game")
+        }
+    }, 15e3)
 })
 
 if (process.platform === "win32") {
@@ -158,6 +157,7 @@ app.on('window-all-closed', () => {
 });
 
 client.login({clientId}).catch(err => {
+    console.error(err)
     new Notification({
         title: "Could not login", 
         body: err.message + "\nPlease restart Discord and try again if this persists.", 
