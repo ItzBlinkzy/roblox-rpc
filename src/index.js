@@ -1,5 +1,5 @@
 const { clientId, cookie } = require("../config.json")
-const { app, Menu, Tray, Notification } = require("electron")
+const { app, Menu, Tray, Notification, shell} = require("electron")
 const { getPlaceId } = require("../utils/getPlaceId")
 const path = require("path")
 const { findRobloxInfo } = require("../utils/findRobloxInfo")
@@ -20,6 +20,7 @@ const client = new rpc.Client({
     transport: "ipc"
 })
 
+
 async function initData() {
     const discordTag = client.user.username + "#" + client.user.discriminator
     const discordId = client.user.id
@@ -30,6 +31,7 @@ async function initData() {
         body: `Your Discord account (${discordTag}) is not verified with RoVer, please verify to use roblox-rpc.`,
         icon: iconPath
         }).show()
+        await shell.openExternal("https://verify.eryn.io/")
         await client.destroy()
         app.quit()
         process.exit(1)
@@ -75,6 +77,7 @@ async function initData() {
     const ctxMenu = Menu.buildFromTemplate(template)
     return ctxMenu
 }
+
 
 app.whenReady().then(async () => {
     console.log("Electron Ready")
