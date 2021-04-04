@@ -1,5 +1,5 @@
 const { clientId, cookie } = require("../config.json")
-const { app, Menu, Tray, Notification, shell} = require("electron")
+const { app, Menu, Tray, Notification, shell } = require("electron")
 const { getPlaceId } = require("../utils/getPlaceId")
 const path = require("path")
 const { findRobloxInfo } = require("../utils/findRobloxInfo")
