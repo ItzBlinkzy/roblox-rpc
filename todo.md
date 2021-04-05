@@ -5,3 +5,4 @@
 * [x] 4. Check for multiple processes to only keep one open at a time.
 * [x] 5. Use electron-builder instead of electron-packager for auto update exe's.
 * [x] 6. Release executable.
+* [ ] 7. Add bloxlink as alternative if there is no RoVer account found.
