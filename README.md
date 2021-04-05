@@ -19,7 +19,7 @@
 
 ## How to use
 1. Make sure to follow [RobloxDiscRPC](https://www.roblox.com/users/2485537594/profile) on ROBLOX and set your `Who can join me?` privacy settings to `Friends and Users I Follow`.
-2. Verify using [RoVer](https://verify.eryn.io/) with the account above ^.
+2. Verify using [RoVer](https://verify.eryn.io/) with the account used to follow above ^.
 3. Make sure Discord is open.
 
 ## Installation
