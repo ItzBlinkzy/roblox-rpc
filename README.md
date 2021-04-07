@@ -23,8 +23,8 @@
 3. Make sure Discord is open.
 
 ## Installation
-1. Download latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) here.
-2. Follow basic setup instructions.
+1. Download the latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) here.
+2. Follow the basic setup instructions.
 
     <img src="https://beeimg.com/images/p40383726664.png" alt="installation" width="450"/>
 3. Run **roblox-rpc.exe**
