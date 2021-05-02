@@ -2,6 +2,7 @@ const noblox = require("noblox.js")
 const rpc = require("discord-rpc")
 const images = require("../images.json")
 const {findRobloxInfo} = require("./findRobloxInfo")
+const {logData} = require("./logData")
 /**
  * 
  * @param {rpc.Client} client 
@@ -17,6 +18,7 @@ async function setPresence(client, placeId) {
     const profileUrl = `https://www.roblox.com/users/${robloxId}/profile`
     
     placeId = placeId.toString()
+    logData(`Username: ${robloxUsername}, RobloxID: ${robloxId} | GameName: ${gameName}, GameLink: ${gameUrl}`)
     const gameLabel = gameName.length < 32 ? gameName : gameName.slice(0, 29) + "..."
     await client.setActivity({
         details: "Playing...",
