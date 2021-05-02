@@ -4,6 +4,7 @@ const { getPlaceId } = require("../utils/getPlaceId")
 const path = require("path")
 const { findRobloxInfo } = require("../utils/findRobloxInfo")
 const { setPresence } = require("../utils/setPresence")
+const { logData } = require("../utils/logData")
 const rpc = require("discord-rpc")
 const noblox = require("noblox.js")
 
@@ -26,20 +27,23 @@ async function initData() {
     const discordId = client.user.id
     const data = await findRobloxInfo(discordId)
     if (!data) {
+        logData(`Attempted verification with DiscordID: ${discordId},  FAILED ❌ | ${new Date().toISOString()}`)
         new Notification({
         title: "Not verified with RoVer!", 
         body: `Your Discord account (${discordTag}) is not verified with RoVer, please verify to use roblox-rpc.`,
         icon: iconPath
         }).show()
+
         await shell.openExternal("https://verify.eryn.io/")
+
         await client.destroy()
         app.quit()
         process.exit(1)
     }
-
     console.log("Found RoVer details", data)
     const robloxUsername = data.robloxUsername
     robloxId = data.robloxId
+    logData(`Attempted verification with DiscordID: ${discordId}, SUCCESS ✅ | RobloxUsername: ${robloxUsername}, RobloxId: ${robloxId} | ${new Date().toISOString()}`)
 
 
     let template = [{
@@ -69,6 +73,7 @@ async function initData() {
         {
             label: "Quit",
             click: async () => {
+                logData(`Exited application at ${new Date().toISOString()}`)
                 await client.destroy()
                 app.quit()
             }
