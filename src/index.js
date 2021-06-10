@@ -123,6 +123,7 @@ client.on("ready", async () => {
             }).show()
             
             await new Promise(r => setTimeout(r, 10e3));
+            logData(`⚠🕔 User did not play ROBLOX in 4 hours, exited client. | ${new Date().toISOString()}`)
             await client.destroy()
             app.quit()
             process.exit(1)
