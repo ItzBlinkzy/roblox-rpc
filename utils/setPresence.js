@@ -1,6 +1,5 @@
 const noblox = require("noblox.js")
 const rpc = require("discord-rpc")
-const images = require("../images.json")
 const {findRobloxInfo} = require("./findRobloxInfo")
 const {logData} = require("./logData")
 /**
@@ -25,7 +24,7 @@ async function setPresence(client, placeId) {
         state: gameName,
         startTimestamp: new Date(),
         largeImageText: "roblox-rpc, made by Blinkzy#3819",
-        largeImageKey: images[placeId] || "default",
+        largeImageKey: "default",
         buttons: [{
                 label: gameLabel,
                 url: gameUrl
