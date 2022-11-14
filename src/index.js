@@ -29,8 +29,8 @@ async function initData() {
     if (!data) {
         logData(`Attempted verification with DiscordID: ${discordId},  FAILED ❌ | ${new Date().toISOString()}`)
         new Notification({
-        title: "Not verified with RoVer!", 
-        body: `Your Discord account (${discordTag}) is not verified with RoVer, please verify to use roblox-rpc.`,
+        title: "Not verified with Bloxlink!", 
+        body: `Your Discord account (${discordTag}) is not verified with Bloxlink, please verify to use roblox-rpc.`,
         icon: iconPath
         }).show()
 
@@ -40,7 +40,7 @@ async function initData() {
         app.quit()
         process.exit(1)
     }
-    console.log("Found RoVer details", data)
+    console.log("Found Bloxlink details", data)
     const robloxUsername = data.robloxUsername
     robloxId = data.robloxId
     logData(`Attempted verification with DiscordID: ${discordId}, SUCCESS ✅ | RobloxUsername: ${robloxUsername}, RobloxId: ${robloxId} | ${new Date().toISOString()}`)
@@ -51,7 +51,7 @@ async function initData() {
             type: "normal",
             click: async () => {
                 new Notification({
-                    title: "Verified with Rover ✅",
+                    title: "Verified with Bloxlink ✅",
                     body: `Account: ${robloxUsername}`, 
                     closeButtonText: "Close button",
                     icon: iconPath

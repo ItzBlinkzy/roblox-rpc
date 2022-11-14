@@ -13,13 +13,13 @@
 
 
 ### How roblox-rpc does it.
-* **roblox-rpc** uses [RoVer Verification](https://verify.eryn.io/) and soon [Bloxlink](https://blox.link/) through Discord to find out the account you're verified with and will utilise the ROBLOX API to find the games you're in.
+* **roblox-rpc** uses [Bloxlink Verification](https://blox.link) through Discord to find out the account you're verified with and will utilise the ROBLOX API to find the games you're in.
 
 ---
 
 ## How to use
 1. Make sure to follow [RobloxDiscRPC](https://www.roblox.com/users/2485537594/profile) on ROBLOX and set your `Who can join me?` privacy settings to `Friends and Users I Follow`.
-2. Verify using [RoVer](https://verify.eryn.io/) with the account used to follow above ^.
+2. Verify using [Bloxlink](https://blox.link) with the account used to follow above ^.
 3. Make sure Discord is open.
 
 ## Installation

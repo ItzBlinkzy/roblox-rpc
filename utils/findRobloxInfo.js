@@ -1,5 +1,7 @@
 const fetch = require("node-fetch")
+const noblox = require("noblox.js")
 
+const {apiKey} = require("../config.json")
 /**
  * 
  * @param {String} discordId 
@@ -7,15 +9,23 @@ const fetch = require("node-fetch")
  */
 
 async function findRobloxInfo(discordId) {
-    const url = `https://verify.eryn.io/api/user/${discordId}`
-    const response = await fetch(url)
-    const data = await response.json()
+    const url = `https://v3.blox.link/developer/discord/${discordId}`
     
-    if (data.errorCode === 404) {
-        return false
-    }
+    const response = await fetch(url, {
+        headers: {
+            "api-key": apiKey
+        }
+    })
 
-    return data
+    const data = await response.json()
+    console.log(data)
+    if (data?.success) {
+        const robloxId = data.user.robloxId
+        const robloxUsername = await noblox.getUsernameFromId(robloxId)
+
+        return {robloxId, robloxUsername}
+    }
+    return false
 }
 
 module.exports.findRobloxInfo = findRobloxInfo
