@@ -26,8 +26,7 @@
 1. Download the latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) here.
 2. Follow the basic setup instructions.
 
-    <img src="![image](https://user-images.githubusercontent.com/68260779/208254672-14fc90c1-50be-4136-81c2-78524a78ba3b.png)
-" alt="installation" width="450"/>
+    <img src="https://user-images.githubusercontent.com/68260779/208254672-14fc90c1-50be-4136-81c2-78524a78ba3b.png" alt="installation" width="450"/>
 3. Run **roblox-rpc.exe**
 
 # FAQ
