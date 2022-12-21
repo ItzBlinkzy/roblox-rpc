@@ -54,7 +54,7 @@ Much more effort needed however.
 
  *  The `apiKey` comes from [Bloxlink](https://blox.link) you will have to go to their website and get one.
  *  The `clientId` is my Discord Application ID, you can make one yourself and replace if wanted, but there is no need.
- * The `cookie` comes from a new account. You will have to create this account in an **incognito window** because logging out in a normal window will stop the cookie from working. Take the .ROBLOSECURITY Cookie and place it here **(REMEMBER THE NAME OF THIS ACCOUNT!)**. Once done you may close the incognito window. *(Don't log out of the account)*
+ * The `cookie` comes from a "bot" account. You will have to create this bot account in an **incognito window** because logging out in a normal window will stop the cookie from working. Take the .ROBLOSECURITY Cookie and place it here **(REMEMBER THE NAME OF THIS ACCOUNT!)**. Once done you may close the incognito window. *(Don't log out of the account)*
 4. You will need to follow the account you just created with your main ROBLOX account and then set the privacy settings to `Friends and Users I Follow`.
 5. Go back to your editor and run `npm install` to get all the packages that are required.
 6. Run the program using `electron src/index.js`. Make sure you are in the correct path.
