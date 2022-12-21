@@ -4,8 +4,8 @@
 
 **ROBLOX RPC** integrates Discord Rich Presence with the ROBLOX API to find the current game on ROBLOX you're playing.
 
-![example](https://user-images.githubusercontent.com/68260779/208254688-ddc0bd8b-c458-4185-ba3b-d8b0b56d72e1.png)
-![example2](https://user-images.githubusercontent.com/68260779/208254692-c8b0188e-747e-46da-96c1-07e226250557.png)
+![example](https://user-images.githubusercontent.com/68260779/208825844-fd52ffec-50cf-4ede-9f08-460dd26d52b6.png)
+![example2](https://user-images.githubusercontent.com/68260779/208825994-a04c9a69-322d-4e8e-97cf-b8316426143f.png)
 
 
 ### This is an alternative to [ro-presence](https://github.com/JiveOff/roPresence).
@@ -28,7 +28,6 @@
 
     <img src="https://user-images.githubusercontent.com/68260779/208254672-14fc90c1-50be-4136-81c2-78524a78ba3b.png" alt="installation" width="450"/>
 3. Run **roblox-rpc.exe**.  *(refer to the FAQ section to confirm the application is running)*
-
 
 ## Running application locally
 ***If you do not want to download the exe file, you can run this application locally.*** 
