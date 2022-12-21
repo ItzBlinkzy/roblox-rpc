@@ -1,8 +1,8 @@
 <img src="https://user-images.githubusercontent.com/68260779/208254746-0055f6a3-2510-426c-b5c2-b3b6ad85715e.png" alt="logo" width="125"/>
 
-# roblox-rpc
+# ROBLOX RPC
 
-**roblox-rpc** integrates Discord Rich Presence with the ROBLOX API to find the current game on ROBLOX you're playing.
+**ROBLOX RPC** integrates Discord Rich Presence with the ROBLOX API to find the current game on ROBLOX you're playing.
 
 ![example](https://user-images.githubusercontent.com/68260779/208254688-ddc0bd8b-c458-4185-ba3b-d8b0b56d72e1.png)
 ![example2](https://user-images.githubusercontent.com/68260779/208254692-c8b0188e-747e-46da-96c1-07e226250557.png)
@@ -12,8 +12,8 @@
 * ***Why?*** Because ro-presence goes overboard by reading from your [registry](https://github.com/JiveOff/roPresence/blob/master/lib/bloxauth.js) to retrieve your `.ROBLOSECURITY` cookie in order to function.
 
 
-### How roblox-rpc does it.
-* **roblox-rpc** uses [Bloxlink Verification](https://blox.link) through Discord to find out the account you're verified with and will utilise the ROBLOX API to find the games you're in.
+### How ROBLOX RPC does it.
+* **ROBLOX RPC** uses [Bloxlink Verification](https://blox.link) through Discord to find out the account you're verified with and will utilise the ROBLOX API to find the games you're in.
 
 ---
 
@@ -39,7 +39,7 @@
     
 * ***What account am I verified with?***
     * When you click the system tray icon, the relevant information will be shown.
-    Clicking these will display a notification that shows further information.
+    Clicking these will display a notification that shows the ROBLOX Username and Discord Tag being tracked.
     
     <img src="https://user-images.githubusercontent.com/68260779/208254818-63a48193-8f71-4d26-917b-dc70a7d41c8f.png" alt="installation" width="150"/>
     
