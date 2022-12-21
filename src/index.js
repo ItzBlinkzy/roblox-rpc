@@ -13,7 +13,6 @@ let tray = null
 let isPlaying = false
 let lastId;
 let robloxId;
-let notInGameCount = 0
 const iconPath = path.join(__dirname, "../logo.png")
 const gotTheLock = app.requestSingleInstanceLock()
 
@@ -29,9 +28,9 @@ async function initData() {
     if (!data) {
         logData(`Attempted verification with DiscordID: ${discordId},  FAILED ❌ | ${new Date().toISOString()}`)
         new Notification({
-        title: "Not verified with Bloxlink!", 
-        body: `Your Discord account (${discordTag}) is not verified with Bloxlink, please verify to use roblox-rpc.`,
-        icon: iconPath
+            title: "Not verified with Bloxlink!",
+            body: `Your Discord account (${discordTag}) is not verified with Bloxlink, please verify to use roblox-rpc.`,
+            icon: iconPath
         }).show()
 
         await shell.openExternal("https://verify.eryn.io/")
@@ -113,25 +112,9 @@ client.on("ready", async () => {
     setInterval(async () => {
         const placeId = await getPlaceId(robloxId)
         const isInDifferentGame = (lastId !== placeId)
-        if (notInGameCount >= 960) {
-            new Notification({
-                title: "Not playing ROBLOX.",
-                body: "You have not played any ROBLOX game in the past 4 hours, roblox-rpc will automatically close in 10 seconds",
-                closeButtonText: "Close button",
-                timeoutType: "never",
-                icon: iconPath
-            }).show()
-            
-            await new Promise(r => setTimeout(r, 10e3));
-            logData(`⚠🕔 User did not play ROBLOX in 4 hours, exited client. | ${new Date().toISOString()}`)
-            await client.destroy()
-            app.quit()
-            process.exit(1)
-        }
 
-        else if (placeId === -1) {
+        if (placeId === -1) {
             console.log("Not in a game, clearing presence.")
-            notInGameCount += 1
             await client.clearActivity()
             isPlaying = false
         }
@@ -141,7 +124,6 @@ client.on("ready", async () => {
             await setPresence(client, placeId).catch(err => console.error(err))
             console.log("Updated presence")
 
-            notInGameCount = 0
             lastId = placeId
             isPlaying = true
         }
