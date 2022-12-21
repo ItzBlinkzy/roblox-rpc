@@ -1,6 +1,7 @@
 const noblox = require("noblox.js")
 const rpc = require("discord-rpc")
 const {findRobloxInfo} = require("./findRobloxInfo")
+const {getPlaceIcon} = require("./getPlaceIcon")
 const {logData} = require("./logData")
 /**
  * 
@@ -11,8 +12,9 @@ const {logData} = require("./logData")
 
 async function setPresence(client, placeId) {
     const {robloxUsername, robloxId} = await findRobloxInfo(client.user.id)
-    const {Name: gameName, Url: gameUrl} = await noblox.getPlaceInfo(placeId)
-
+    const {Name: gameName, Url: gameUrl, UniverseId: universeId} = await noblox.getPlaceInfo(placeId)
+    
+    const iconURL = await getPlaceIcon(universeId)
     // console.log(gameName, gameUrl)
     const profileUrl = `https://www.roblox.com/users/${robloxId}/profile`
     
@@ -24,7 +26,7 @@ async function setPresence(client, placeId) {
         state: gameName,
         startTimestamp: new Date(),
         largeImageText: "roblox-rpc, made by Blinkzy#3924",
-        largeImageKey: "default",
+        largeImageKey: iconURL || "default",
         buttons: [{
                 label: gameLabel,
                 url: gameUrl
