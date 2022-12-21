@@ -27,6 +27,7 @@ async function setPresence(client, placeId) {
         startTimestamp: new Date(),
         largeImageText: "roblox-rpc, made by Blinkzy#3924",
         largeImageKey: iconURL || "default",
+        smallImageKey: "default",
         buttons: [{
                 label: gameLabel,
                 url: gameUrl
