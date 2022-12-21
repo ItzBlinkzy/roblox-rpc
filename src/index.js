@@ -131,7 +131,7 @@ client.on("ready", async () => {
         else {
             console.log("In a game")
         }
-    }, 15e3)
+    }, 10e3)
 })
 
 if (process.platform === "win32") {
