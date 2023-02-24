@@ -2,6 +2,7 @@ const noblox = require("noblox.js")
 const rpc = require("discord-rpc")
 const {findRobloxInfo} = require("./findRobloxInfo")
 const {getPlaceIcon} = require("./getPlaceIcon")
+const fetch = require("node-fetch")
 const {logData} = require("./logData")
 /**
  * 
@@ -12,11 +13,15 @@ const {logData} = require("./logData")
 
 async function setPresence(client, placeId) {
     const {robloxUsername, robloxId} = await findRobloxInfo(client.user.id)
-    const {Name: gameName, Url: gameUrl, UniverseId: universeId} = await noblox.getPlaceInfo(placeId)
-    
+    const response = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
+    const data = await response.json()
+    const universeId = data.universeId
+
+    const universeInfo = await noblox.getUniverseInfo([ universeId ])
+    const {name: gameName} = universeInfo[0]
     const iconURL = await getPlaceIcon(universeId)
-    // console.log(gameName, gameUrl)
     const profileUrl = `https://www.roblox.com/users/${robloxId}/profile`
+    const gameUrl = `https://roblox.com/games/${placeId}`
     
     placeId = placeId.toString()
     logData(`Username: ${robloxUsername}, RobloxID: ${robloxId} | GameName: ${gameName}, GameLink: ${gameUrl}`)
