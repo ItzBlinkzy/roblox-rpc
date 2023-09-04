@@ -30,7 +30,7 @@ async function setPresence(client, placeId) {
         details: "Playing...",
         state: gameName,
         startTimestamp: new Date(),
-        largeImageText: "roblox-rpc, made by Blinkzy#3924",
+        largeImageText: "roblox-rpc, made by @bigblinkzy",
         largeImageKey: iconURL || "default",
         smallImageKey: "default",
         buttons: [{

@@ -22,7 +22,7 @@ const client = new rpc.Client({
 
 
 async function initData() {
-    const discordTag = client.user.username + "#" + client.user.discriminator
+    const discordTag = `@${client.user.username}`
     const discordId = client.user.id
     const data = await findRobloxInfo(discordId)
     if (!data) {
@@ -63,7 +63,7 @@ async function initData() {
             click: async () => {
                 new Notification({
                     title: "Discord Info",
-                    body: `Discord Tag: ${discordTag}\nDiscord ID: ${discordId}`, 
+                    body: `Discord User: ${discordTag}\nDiscord ID: ${discordId}`, 
                     closeButtonText: "Close button",
                     icon: iconPath
                 }).show()
