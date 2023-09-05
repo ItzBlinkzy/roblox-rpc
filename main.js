@@ -21,16 +21,16 @@ const client = new rpc.Client({
     transport: "ipc"
 })
 
-async function createMainWindow() {
+async function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1024,
+    height: 768,
     icon: iconPath,
     resizable: false,
     fullscreenable: false,
     autoHideMenuBar: true,
     webPreferences: {
-      nodeIntegration: true,
+      preload: path.join(__dirname, "./preload.js")
     },
   });
 
@@ -45,74 +45,33 @@ async function createMainWindow() {
 async function initData() {
     const discordTag = `@${client.user.username}`
     const discordId = client.user.id
-    const data = await findRobloxInfo(discordId)
+    // const data = await findRobloxInfo(discordId) // prevent api spam dev purposes
+    let data;
     if (!data) {
-        logData(`Attempted verification with DiscordID: ${discordId},  FAILED ❌ | ${new Date().toISOString()}`)
-        new Notification({
-            title: "Not verified with Bloxlink!",
-            body: `Your Discord account (${discordTag}) is not verified with Bloxlink, please verify to use roblox-rpc.`,
-            icon: iconPath
-        }).show()
-
-        await shell.openExternal("https://verify.eryn.io/")
-
-        await client.destroy()
-        app.quit()
-        process.exit(1)
+        // "Not verified with Bloxlink!", show details to window
+        console.log("Not verified.")
+        await shell.openExternal("https://blox.link")
+        const notificationData = {label: "error", message: "Not verified with Bloxlink!" }
+        mainWindow.webContents.send("update-data", notificationData)
+        // app.quit()
+        // process.exit(1)
     }
     console.log("Found Bloxlink details", data)
     const robloxUsername = data.robloxUsername
     robloxId = data.robloxId
-    logData(`Attempted verification with DiscordID: ${discordId}, SUCCESS ✅ | RobloxUsername: ${robloxUsername}, RobloxId: ${robloxId} | ${new Date().toISOString()}`)
 
+    // verified show details to window
+    // mainWindow.webContents.send("update-data", "HELLO FROM MAIN")
 
-    let template = [{
-            label: `Verified ✅ : ${robloxUsername}`,
-            type: "normal",
-            click: async () => {
-                new Notification({
-                    title: "Verified with Bloxlink ✅",
-                    body: `Account: ${robloxUsername}`, 
-                    closeButtonText: "Close button",
-                    icon: iconPath
-                }).show()
-            }
-        },
-        {
-            label: `Discord Tag : ${discordTag}`,
-            type: "normal",
-            click: async () => {
-                new Notification({
-                    title: "Discord Info",
-                    body: `Discord User: ${discordTag}\nDiscord ID: ${discordId}`, 
-                    closeButtonText: "Close button",
-                    icon: iconPath
-                }).show()
-            }
-        },
-        {
-            label: "Quit",
-            click: async () => {
-                logData(`Exited application at ${new Date().toISOString()}`)
-                await client.destroy()
-                app.quit()
-            }
-        }
-    ]
-    const ctxMenu = Menu.buildFromTemplate(template)
-    return ctxMenu
 }
 
 
 app.whenReady().then(async () => {
-    await createMainWindow()
+    await createWindow()
+    mainWindow.webContents.send("update-data", {message: "Hello from main"})
     console.log("Electron Ready")
     if (!gotTheLock) {
-        new Notification({
-                title: "Application already open",
-                body: "There are already multiple processes of roblox-rpc running",
-                icon: iconPath
-            }).show()
+      // "Application already open",
         app.quit()
     }
 })
@@ -122,41 +81,17 @@ client.on("ready", async () => {
     
     tray = new Tray(iconPath)
     tray.setToolTip("ROBLOX Discord Rich Presence")
-    const ctxMenu = await initData()
-    tray.setContextMenu(ctxMenu)
+    await initData()
     
     tray.on("click", () => {
       if (!mainWindow || mainWindow.isDestroyed()) {
         // Reinitialize the main window if it's null or destroyed
-        createMainWindow();
+        createWindow();
       }
     });
     
     // RPC UPDATING
     await noblox.setCookie(cookie)
-    setInterval(async () => {
-        const placeId = await getPlaceId(robloxId)
-        const isInDifferentGame = (lastId !== placeId)
-
-        if (placeId === -1) {
-            console.log("Not in a game, clearing presence.")
-            await client.clearActivity()
-            isPlaying = false
-        }
-        
-        else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
-            console.log(placeId)
-            await setPresence(client, placeId).catch(err => console.error(err))
-            console.log("Updated presence")
-
-            lastId = placeId
-            isPlaying = true
-        }
-        
-        else {
-            console.log("In a game")
-        }
-    }, 10e3)
 })
 
 if (process.platform === "win32") {
@@ -177,9 +112,5 @@ ipcMain.on("some-event-from-renderer", (event, data) => {
 
 client.login({clientId}).catch(err => {
     console.error(err)
-    new Notification({
-        title: "Could not login", 
-        body: err.message + "\nPlease restart Discord and try again if this persists.", 
-        icon: iconPath
-    }).show()
+  // could not login restart discord show on main window
 })
