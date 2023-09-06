@@ -8,7 +8,7 @@ const {logData} = require("./logData")
  * 
  * @param {rpc.Client} client 
  * @param {Number} placeId 
- * @returns {void}
+ * @returns {Object}
  */
 
 async function setPresence(client, placeId) {
@@ -22,14 +22,14 @@ async function setPresence(client, placeId) {
     const iconURL = await getPlaceIcon(universeId)
     const profileUrl = `https://www.roblox.com/users/${robloxId}/profile`
     const gameUrl = `https://roblox.com/games/${placeId}`
-    
+    const currentTime = new Date()
     placeId = placeId.toString()
     logData(`Username: ${robloxUsername}, RobloxID: ${robloxId} | GameName: ${gameName}, GameLink: ${gameUrl}`)
     const gameLabel = gameName.length < 32 ? gameName : gameName.slice(0, 29) + "..."
     await client.setActivity({
         details: "Playing...",
         state: gameName,
-        startTimestamp: new Date(),
+        startTimestamp: currentTime,
         largeImageText: "roblox-rpc, made by @bigblinkzy",
         largeImageKey: iconURL || "default",
         smallImageKey: "default",
@@ -43,5 +43,7 @@ async function setPresence(client, placeId) {
             }
         ],
     })
+
+    return {robloxUsername, robloxId, gameName, gameUrl, iconURL, profileUrl, currentTime}
 }
 module.exports.setPresence = setPresence

@@ -42,21 +42,20 @@ img {
 body {
   font-family: "Bakbak One", cursive;
   font-weight: lighter;
-  background-color: #4c454c;
+  background-color: #ababab;
   height: 100%; /* Set a light background color */
+  color: #333; /* Dark text for currently playing */
 }
 
 h1 {
   font-size: 24px; /* Adjust heading font size */
-  color: #bbb8b8; /* Darken the heading text color */
-  background-color: #4c454c;
+  color: white; /* Darken the heading text color */
   text-align: center;
   margin-top: 20px;
 }
 
 #container {
   display: flex;
-  background-color: #4c454c;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 5px; /* Add rounded corners to the container */
@@ -70,11 +69,10 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #f77fbe;
+  background-color: #add8e6;
   border: 2px solid rgb(36, 35, 35);
   border-radius: 5px;
   width: 100%;
-  height: 100%;
   padding: 0.8em;
 }
 
@@ -102,32 +100,61 @@ h1 {
   gap: 0.8em;
   padding: 1em;
 }
-#noti-info {
+#noti-info,
+#error-info {
   display: flex;
   flex-direction: column;
   border-radius: 5px;
   border: 1px solid white;
   padding: 2em;
-  color: rgb(203, 191, 191);
+  color: rgb(204, 185, 77);
+  font-size: large;
+  font: bold;
   background-color: #333;
+}
+#error-info {
+  background-color: rgb(196, 92, 92);
 }
 
 #currently-playing {
+  display: flex;
   font-size: 18px; /* Adjust currently playing font size */
   color: #333; /* Dark text for currently playing */
+  padding: 1em;
+  gap: 3em;
+}
+
+#game-img {
+  height: 100px;
+  width: 100px;
+  background-color: grey;
+  border: 3px solid black;
+  background-clip: content-box;
+  border-radius: 2px;
+}
+
+#game-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0.2em;
 }
 
 #user-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-top: 2em;
+  padding-bottom: 2em;
 }
 
-#avatar {
+#roblox-avatar,
+#discord-avatar {
   border-radius: 50%;
-  height: 50px;
-  width: 50px;
+  height: 80px;
+  width: 80px;
 }
+
 .card {
   display: flex;
   flex-direction: row;

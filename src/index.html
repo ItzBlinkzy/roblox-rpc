@@ -16,51 +16,51 @@
   <body>
     <h1>Roblox RPC</h1>
     <div id="container">
+      <div>
+        <h2 id="noti-header">Notifications</h2>
+        <div id="notification">
+          <!-- <div id="noti-info">
+            <p>3 mins ago - There was an error loading user details</p>
+          </div>
+          <div id="noti-info">
+            <p>5 mins ago - Could not load into game</p>
+          </div> -->
+        </div>
+      </div>
+
       <div class="content-container" id="user-container">
         <div id="user-info">
           <h2>ROBLOX</h2>
           <div class="card">
-            <img
-              src="https://xsgames.co/randomusers/assets/avatars/pixel/1.jpg"
-              id="avatar"
-            />
+            <img src="../icons/logo.png" id="roblox-avatar" />
             <div class="card-info">
-              <div><p>LegendaryStone</p></div>
-              <div><p>81987016</p></div>
+              <div><p id="roblox-user">N/A</p></div>
+              <div><p id="roblox-id">N/A</p></div>
             </div>
           </div>
         </div>
         <div id="user-info">
           <h2>DISCORD</h2>
           <div class="card">
-            <img
-              src="https://xsgames.co/randomusers/assets/avatars/pixel/2.jpg"
-              id="avatar"
-            />
+            <img src="../icons/discord-logo.png" id="discord-avatar" />
             <div class="card-info">
-              <div><p>User: @bigblinkzy</p></div>
-              <div><p>Id: 25842355385926725</p></div>
+              <div><p id="discord-user">N/A</p></div>
+              <div><p id="discord-id">N/A</p></div>
             </div>
           </div>
         </div>
       </div>
       <div class="content-container">
+        <h2>Currently playing</h2>
         <div id="currently-playing">
-          <p>Currently Playing - Project Apex since localTime</p>
-        </div>
-      </div>
-      <div class="content-container">
-        <h2 id="noti-header">Notifications</h2>
-        <div id="notification">
-          <div id="noti-info">
-            <p>3 mins ago - There was an error loading user details</p>
-          </div>
-          <div id="noti-info">
-            <p>5 mins ago - Could not load into game</p>
+          <img id="game-img" />
+          <div id="game-info-container">
+            <div><p id="game-title">N/A</p></div>
+            <div><p id="elapsed-time">N/A</p></div>
           </div>
         </div>
       </div>
     </div>
-    <script src="./index.js"></script>
+    <script src="./index.js" defer></script>
   </body>
 </html>
