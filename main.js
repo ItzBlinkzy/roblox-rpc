@@ -75,7 +75,7 @@ async function initData() {
         console.log("Not verified with Bloxlink.")
         sendDataToRenderer("printMessage", "NTO VERIFIED WITH BLOXLINK")
         // await shell.openExternal("https://blox.link")
-        const notificationData = {label: "notification", type: "error", message: "Not verified with Bloxlink! Please visit https://blox.link to verify." }
+        const notificationData = {label: "notification", type: "warning", message: "Not verified with Bloxlink! Please visit https://blox.link to verify." }
         console.log("SENDING NOTIFICATION DATA")
         sendDataToRenderer("printMessage", "sending notification data")
         sendDataToRenderer("notification", notificationData)
