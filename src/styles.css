@@ -71,6 +71,14 @@ h1 {
   white-space: normal; /* Allow text to wrap */
 }
 
+#version-number {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 0.5em;
+  font-size: 20px;
+}
+
 .notif {
   width: 600px;
   height: 50px;

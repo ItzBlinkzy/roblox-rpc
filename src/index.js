@@ -87,16 +87,18 @@ const closeApp = () => {
   console.log("closing app - (functionality not added)")
 }
 
-const printMessage = (data) => {
-  console.log("FROM BACKEND", data)
-}
+const updateVersion = ({data}) => {
+  console.log(data)
+  const versionNum = document.getElementById("version-number")
+  versionNum.textContent = data.version
+} 
 
 const messageType = {
   notification: updateNotification,
   userDetails: updateUserDetails,  
   gameDetails: updateGameDetails,
   clearGameDetails: clearGameDetails,
-  printMessage: printMessage
+  updateVersion: updateVersion,
 }
 
 

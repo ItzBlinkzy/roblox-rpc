@@ -20,7 +20,8 @@
     "discord-rpc": "^4.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "noblox.js": "^4.14.1",
-    "node-fetch": "^2.6.6"
+    "node-fetch": "^2.6.6",
+    "semver": "^7.5.4"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.1",
