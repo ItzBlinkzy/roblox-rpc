@@ -71,9 +71,10 @@ Much more effort needed however.
 
 - **_How do I know it's running?_**
   - It should appear as an icon (in your system tray) at the right side of your taskbar.
-  <img src="https://user-images.githubusercontent.com/68260779/208254798-7b04920f-44a3-49fc-a676-f67293c3ae33.png"
-  alt="installation" width="150"/>
+    <img src="https://user-images.githubusercontent.com/68260779/208254798-7b04920f-44a3-49fc-a676-f67293c3ae33.png"
+    alt="installation" width="150"/>
 - **_What account am I verified with?_**
+
   - When you click the system tray icon, the relevant information will be shown.
     Clicking these will display a notification that shows the ROBLOX Username and Discord Tag being tracked.
     <img src="https://user-images.githubusercontent.com/68260779/208254818-63a48193-8f71-4d26-917b-dc70a7d41c8f.png" alt="installation" width="150"/>

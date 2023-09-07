@@ -83,7 +83,7 @@ const clearGameDetails = () => {
 }
 
 const printError = ({err}) => {
-  console.log(`Process Error: \nType: ${err.name}\nMsg: ${err.message}\nStack:${err.stack}\n------`)
+  console.log(err)
 }
 
 
