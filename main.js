@@ -6,7 +6,7 @@ const { getPlaceId } = require("./utils/getPlaceId");
 const { findRobloxInfo } = require("./utils/findRobloxInfo");
 const { setPresence } = require("./utils/setPresence");
 const { clientId, cookie } = require("./config.json");
-const { isOutdatedVersion, getLatestVersion, getClientVersion } = require("./utils/checkVersion");
+const { isOutdatedVersion, getClientVersion, getLatestVersion } = require("./utils/checkVersion");
 let isPlaying = false;
 let lastId;
 let mainWindow;
@@ -83,11 +83,10 @@ async function initData() {
 app.whenReady().then(async () => {
     console.log("Electron Ready")
     await createWindow()
-    const versionOutdated = await isOutdatedVersion()
-    const latestVersion = await getLatestVersion()
     const clientVersion = await getClientVersion()
-    console.log({latestVersion, clientVersion})
-    if (versionOutdated) {
+    const latestVersion = await getLatestVersion()
+    const isOutdated = isOutdatedVersion(latestVersion, clientVersion)
+    if (isOutdated) {
       sendDataToRenderer("notification", {type: "error", message: `A new version is available (${latestVersion}). This version may be broken. Visit https://github.com/ItzBlinkzy/roblox-rpc`})
     }
     sendDataToRenderer("updateVersion", {version: clientVersion})
