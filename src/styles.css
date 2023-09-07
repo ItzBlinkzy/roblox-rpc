@@ -2,8 +2,8 @@
 html {
   box-sizing: border-box;
   font-size: 16px;
-  width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  background-color: #add8e6;
 }
 
 *,
@@ -36,22 +36,77 @@ img {
   max-width: 100%;
   height: auto;
 }
+button {
+  outline: none;
+}
 
 /* --------------------- */
 
 body {
   font-family: "Bakbak One", cursive;
   font-weight: lighter;
-  background-color: #ababab;
+  overflow-x: hidden;
   height: 100%; /* Set a light background color */
   color: #333; /* Dark text for currently playing */
 }
 
 h1 {
-  font-size: 24px; /* Adjust heading font size */
-  color: white; /* Darken the heading text color */
+  font-size: 48px; /* Adjust heading font size */
   text-align: center;
   margin-top: 20px;
+}
+
+#wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+}
+
+#notif-container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: normal; /* Allow text to wrap */
+}
+
+.notif {
+  width: 600px;
+  height: 50px;
+  border: 2px solid #181414;
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  white-space: normal;
+  opacity: 70%;
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 20px;
+  height: 40px;
+  font-size: 24px;
+  color: inherit;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+/* Style the Font Awesome icon */
+.close-btn i {
+  font-size: 24px; /* Adjust the icon size */
 }
 
 #container {
@@ -62,7 +117,6 @@ h1 {
   padding: 2em;
   gap: 2em;
   width: 100%;
-  height: 100%;
 }
 
 .content-container {
@@ -70,13 +124,11 @@ h1 {
   flex-direction: column;
   justify-content: center;
   background-color: #add8e6;
-  border: 2px solid rgb(36, 35, 35);
-  border-radius: 5px;
   width: 100%;
   padding: 0.8em;
 }
 
-#user-info {
+.user-info {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -143,7 +195,7 @@ h1 {
 #user-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   padding-top: 2em;
   padding-bottom: 2em;
 }

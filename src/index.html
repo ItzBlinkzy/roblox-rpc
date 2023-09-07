@@ -10,53 +10,48 @@
       href="https://fonts.googleapis.com/css2?family=Bakbak+One&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
 
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>Roblox RPC</h1>
-    <div id="container">
-      <div>
-        <h2 id="noti-header">Notifications</h2>
-        <div id="notification">
-          <!-- <div id="noti-info">
-            <p>3 mins ago - There was an error loading user details</p>
+    <h1><span id="title">ROBLOX RPC</span></h1>
+    <div id="notif-container"></div>
+    <div id="wrapper">
+      <div id="container">
+        <div class="content-container" id="user-container">
+          <div class="user-info">
+            <h2>ROBLOX</h2>
+            <div class="card">
+              <img src="../images/logo.png" id="roblox-avatar" />
+              <div class="card-info">
+                <div><p id="roblox-user">N/A</p></div>
+                <div><p id="roblox-id">N/A</p></div>
+              </div>
+            </div>
           </div>
-          <div id="noti-info">
-            <p>5 mins ago - Could not load into game</p>
-          </div> -->
-        </div>
-      </div>
-
-      <div class="content-container" id="user-container">
-        <div id="user-info">
-          <h2>ROBLOX</h2>
-          <div class="card">
-            <img src="../icons/logo.png" id="roblox-avatar" />
-            <div class="card-info">
-              <div><p id="roblox-user">N/A</p></div>
-              <div><p id="roblox-id">N/A</p></div>
+          <div class="user-info">
+            <h2>DISCORD</h2>
+            <div class="card">
+              <img src="../images/discord-logo.png" id="discord-avatar" />
+              <div class="card-info">
+                <div><p id="discord-user">N/A</p></div>
+                <div><p id="discord-id">N/A</p></div>
+              </div>
             </div>
           </div>
         </div>
-        <div id="user-info">
-          <h2>DISCORD</h2>
-          <div class="card">
-            <img src="../icons/discord-logo.png" id="discord-avatar" />
-            <div class="card-info">
-              <div><p id="discord-user">N/A</p></div>
-              <div><p id="discord-id">N/A</p></div>
+        <div class="content-container">
+          <h2>Currently playing</h2>
+          <div id="currently-playing">
+            <img id="game-img" />
+            <div id="game-info-container">
+              <div><p id="game-title">N/A</p></div>
+              <div><p id="elapsed-time">N/A</p></div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="content-container">
-        <h2>Currently playing</h2>
-        <div id="currently-playing">
-          <img id="game-img" />
-          <div id="game-info-container">
-            <div><p id="game-title">N/A</p></div>
-            <div><p id="elapsed-time">N/A</p></div>
           </div>
         </div>
       </div>

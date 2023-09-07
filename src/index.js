@@ -8,37 +8,39 @@ const msToMinutesAndSeconds = (ms) => {
 };
 
 const updateNotification = ({ data }) => {
-  // can be "type": "error" | "type": "notification"
-   /*
-  CREATES THIS ELEMENT
-          <div id="noti-info">
-            <p>3 mins ago - There was an error loading user details</p>
-          </div>*/
+  // can be "type": "error" | "type": "warning"
 
-  console.log("IN UPDATE NOTIFICATIOON FUNCTION", data)
-
-  const divElement = document.createElement("div")
-  const pElement = document.createElement("p")
-  const notificationElement = document.getElementById("notification")
-  const notificationType = data.type
-
-  if (notificationType === "error") {
-    divElement.id = "error-info"
+  const typeColors = {
+    "error": "red",
+    "warning": "yellow"
   }
 
-  else {
-    divElement.id = "noti-info"
-  }
-  pElement.textContent = data.message
-  divElement.appendChild(pElement)
+  const notifEl = document.createElement("div");
+  notifEl.classList.add("notif");
+  notifEl.textContent = data.message;
+  notifEl.style.backgroundColor = typeColors[data.type]
 
-  notificationElement.appendChild(divElement)
+  const closeBtn = document.createElement("button");
+  closeBtn.classList.add("close-btn");
+  closeBtn.addEventListener("click", () => {
+    const notif = closeBtn.parentElement
+    notif.style.display = "none"
+  })
+
+  const closeIcon = document.createElement("i");
+  closeIcon.classList.add("fas", "fa-times");
+
+  closeBtn.appendChild(closeIcon);
+
+  notifEl.appendChild(closeBtn);
+
+  const notifWrapper = document.getElementById("notif-container");
+  notifWrapper.appendChild(notifEl);
 }
 
 const updateUserDetails = ({data}) => {
   /* 
-  Shape: {roblox: {user: robloxUsername, id: robloxId}, discord: {discordUser, discordUser}}
-
+  Shape: {roblox: {user: robloxUsername, id: robloxId, avatar: avatarIcon}, discord: {discordUser, discordUser}}
 
   */
   const {roblox, discord, avatar} = data
@@ -101,6 +103,7 @@ const messageType = {
 document.addEventListener("DOMContentLoaded", () => {
   const gameImg = document.getElementById("game-img")
   gameImg.style.display = "none"
+
   window.electronAPI.updateData((event, data) => {
     console.log("Event received on front end")
     const funcToRun = messageType[data.label]
