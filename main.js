@@ -11,17 +11,7 @@ let isPlaying = false;
 let lastId;
 let mainWindow;
 let robloxId;
-const globalUserData = {
-  roblox: {
-    user: "",
-    id: -1,
-    avatar: ""
-  },
-  discord: {
-    user: "",
-    id: "",
-  },
-};
+
 const iconPath = path.join(__dirname, "./icons/logo.png")
 const gotTheLock = app.requestSingleInstanceLock()
 
