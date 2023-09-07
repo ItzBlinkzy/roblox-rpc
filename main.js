@@ -163,8 +163,18 @@ app.whenReady().then(async () => {
       // Handle the event from your main window
     });
     
-    client.login({clientId}).catch(async err => {
+    client.login({clientId}).catch(async (err) => {
       console.error(err)
       sendDataToRenderer("notification", {type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application. Contact @bigblinkzy if this persists."})
     })
+})
+
+process.on("uncaughtException", (err) => {
+  sendDataToRenderer("notification", {type: "error", message: "An uncaughtException has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
+  sendDataToRenderer("printError", err)
+})
+
+process.on("unhandledRejection", (err) => {
+  sendDataToRenderer("notification", {type: "error", message: "An unhandledRejection has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
+  sendDataToRenderer("printError", err)
 })

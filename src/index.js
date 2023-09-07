@@ -82,6 +82,10 @@ const clearGameDetails = () => {
   elapsedTime.textContent = "N/A"
 }
 
+const printError = ({err}) => {
+  console.log(`Process Error: \nType: ${err.name}\nMsg: ${err.message}\nStack:${err.stack}\n------`)
+}
+
 
 const closeApp = () => {
   console.log("closing app - (functionality not added)")
@@ -99,6 +103,7 @@ const messageType = {
   gameDetails: updateGameDetails,
   clearGameDetails: clearGameDetails,
   updateVersion: updateVersion,
+  printError: printError
 }
 
 
