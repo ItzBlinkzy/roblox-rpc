@@ -172,7 +172,8 @@ ipcMain.on("some-event-from-renderer", (event, data) => {
   // Handle the event from your main window
 });
 
-client.login({clientId}).catch(err => {
-    console.error(err)
-  // could not login restart discord show on main window
+client.login({clientId}).catch(async err => {
+  console.error(err)
+  await new Promise(r => setTimeout(r, 2500));
+  sendDataToRenderer("notification", {type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application."})
 })
