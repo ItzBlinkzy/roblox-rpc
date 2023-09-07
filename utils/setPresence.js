@@ -3,7 +3,6 @@ const rpc = require("discord-rpc")
 const {findRobloxInfo} = require("./findRobloxInfo")
 const {getPlaceIcon} = require("./getPlaceIcon")
 const fetch = require("node-fetch")
-const {logData} = require("./logData")
 /**
  * 
  * @param {rpc.Client} client 
@@ -24,7 +23,6 @@ async function setPresence(client, placeId) {
     const gameUrl = `https://roblox.com/games/${placeId}`
     const currentTime = new Date()
     placeId = placeId.toString()
-    logData(`Username: ${robloxUsername}, RobloxID: ${robloxId} | GameName: ${gameName}, GameLink: ${gameUrl}`)
     const gameLabel = gameName.length < 32 ? gameName : gameName.slice(0, 29) + "..."
     await client.setActivity({
         details: "Playing...",
