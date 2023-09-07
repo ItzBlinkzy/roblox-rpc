@@ -11,8 +11,8 @@ const updateNotification = ({ data }) => {
   // can be "type": "error" | "type": "warning"
 
   const typeColors = {
-    "error": "red",
-    "warning": "yellow"
+    "error": "#ff9494",
+    "warning": "#ffff31"
   }
 
   const notifEl = document.createElement("div");

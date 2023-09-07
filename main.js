@@ -58,7 +58,6 @@ async function createWindow() {
 
 async function initData() {
   // returns boolean whether user is successfully verified with blox link or not
-  sendDataToRenderer("printMessage", "INITALIZING DATA INITDATA()")
 
     const discordUser = `@${client.user.username}`
     const discordId = client.user.id
@@ -66,18 +65,15 @@ async function initData() {
     globalUserData.discord.id = discordId
     
     const data = await findRobloxInfo(discordId)
-    sendDataToRenderer("printMessage", data)
     if (!data) {
         // prevent a race condition.
         await new Promise(r => setTimeout(r, 500));
         // This also occurs if rate limited by bloxlink
         // { success: false, reason: "You have reached your API key limit for today. Email cm@blox.link for elevated rates."}
         console.log("Not verified with Bloxlink.")
-        sendDataToRenderer("printMessage", "NTO VERIFIED WITH BLOXLINK")
         // await shell.openExternal("https://blox.link")
-        const notificationData = {label: "notification", type: "warning", message: "Not verified with Bloxlink! Please visit https://blox.link to verify." }
+        const notificationData = {type: "warning", message: "Not verified with Bloxlink! Please visit https://blox.link to verify." }
         console.log("SENDING NOTIFICATION DATA")
-        sendDataToRenderer("printMessage", "sending notification data")
         sendDataToRenderer("notification", notificationData)
         // app.quit()
         // process.exit(1)
@@ -86,7 +82,6 @@ async function initData() {
 
     else {
       console.log("Found Bloxlink details", data)
-      sendDataToRenderer("printMessage", "Found bloxlink details")
 
       globalUserData.roblox.user = data.robloxUsername
       globalUserData.roblox.id = data.robloxId
@@ -104,7 +99,6 @@ async function initData() {
 app.whenReady().then(async () => {
     await createWindow()
     console.log("Electron Ready")
-    sendDataToRenderer("printMessage", "ELECTRON READY")
 
     if (!gotTheLock) {
       // "Application already open",
@@ -114,7 +108,6 @@ app.whenReady().then(async () => {
 
 client.on("ready", async () => {
     console.log("RPC Ready")
-    sendDataToRenderer("printMessage", "RPC READY")
 
     // possibly send data to renderer here saying rpc ready and if it doesnt show on renderer
     // it means that rpc had internal error.
@@ -122,7 +115,12 @@ client.on("ready", async () => {
     const isVerified = await initData()
     
     // RPC UPDATING
-    await noblox.setCookie(cookie)
+    try {
+      await noblox.setCookie(cookie)
+    }
+    catch (e) {
+      sendDataToRenderer("notification", {message: "Could not login with bot account. Please contact @bigblinkzy on Discord.", type: "error"})
+    }
 
     if (isVerified) {
       setInterval(async () => {
