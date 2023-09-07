@@ -10,6 +10,7 @@ const { isOutdatedVersion, getLatestVersion, getClientVersion } = require("./uti
 let isPlaying = false;
 let lastId;
 let mainWindow;
+let robloxId;
 const globalUserData = {
   roblox: {
     user: "",
@@ -27,6 +28,7 @@ const gotTheLock = app.requestSingleInstanceLock()
 const client = new rpc.Client({
     transport: "ipc"
 })
+
 const sendDataToRenderer = (label, data) => {
   console.log("Sending data to renderer", data)
   if (mainWindow && !mainWindow.isDestroyed()) {
@@ -61,13 +63,9 @@ async function initData() {
 
     const discordUser = `@${client.user.username}`
     const discordId = client.user.id
-    globalUserData.discord.user = discordUser
-    globalUserData.discord.id = discordId
-    
     const data = await findRobloxInfo(discordId)
     if (!data) {
         // prevent a race condition.
-        await new Promise(r => setTimeout(r, 500));
         // This also occurs if rate limited by bloxlink
         // { success: false, reason: "You have reached your API key limit for today. Email cm@blox.link for elevated rates."}
         console.log("Not verified with Bloxlink.")
@@ -82,14 +80,10 @@ async function initData() {
 
     else {
       console.log("Found Bloxlink details", data)
-
-      globalUserData.roblox.user = data.robloxUsername
-      globalUserData.roblox.id = data.robloxId
-      const robloxAvatar = await noblox.getPlayerThumbnail(globalUserData.roblox.id)
-      globalUserData.roblox.avatar = robloxAvatar[0].imageUrl
-      console.log(globalUserData)
-      // verified show details to window
-      sendDataToRenderer("userDetails", globalUserData)
+      robloxId = data.robloxId
+      const robloxAvatar = await noblox.getPlayerThumbnail(data.robloxId)
+      const userData = {roblox: {user: data.robloxUsername, id: data.robloxId, avatar: robloxAvatar[0].imageUrl}, discord: {user: discordUser, id: discordId}}
+      sendDataToRenderer("userDetails", userData)
       return true
     }
 
@@ -113,76 +107,75 @@ app.whenReady().then(async () => {
       // "Application already open",
         app.quit()
     }
-})
-
-client.on("ready", async () => {
-    console.log("RPC Ready")
-
-    // possibly send data to renderer here saying rpc ready and if it doesnt show on renderer
-    // it means that rpc had internal error.
-
-    const isVerified = await initData()
+    client.on("ready", async () => {
+        console.log("RPC Ready")
     
-    // RPC UPDATING
-    try {
-      await noblox.setCookie(cookie)
-    }
-    catch (e) {
-      sendDataToRenderer("notification", {message: "Could not login with bot account. Please contact @bigblinkzy on Discord.", type: "error"})
-    }
+        // possibly send data to renderer here saying rpc ready and if it doesnt show on renderer
+        // it means that rpc had internal error.
+    
+        const isVerified = await initData()
+        
+        // RPC UPDATING
+        try {
+          await noblox.setCookie(cookie)
+        }
 
-    if (isVerified) {
-      setInterval(async () => {
-        const placeId = await getPlaceId(globalUserData.roblox.id)
-        const isInDifferentGame = (lastId !== placeId)
-  
-        if (placeId === -1) {
-            console.log("Not in a game, clearing presence.")
-            await client.clearActivity()
-            isPlaying = false
-
-            // they were previously in a game
-            if (lastId) {
-              console.log("PREVIOUSLY IN GAME, CLEAR THE BROWSER")
-              lastId = null
-              sendDataToRenderer("clearGameDetails")
+        catch (e) {
+          sendDataToRenderer("notification", {message: "Could not login with bot account. Please contact @bigblinkzy on Discord.", type: "error"})
+        }
+    
+        if (isVerified) {
+          setInterval(async () => {
+            const placeId = await getPlaceId(robloxId)
+            const isInDifferentGame = (lastId !== placeId)
+      
+            if (placeId === -1) {
+                console.log("Not in a game, clearing presence.")
+                await client.clearActivity()
+                isPlaying = false
+    
+                // they were previously in a game
+                if (lastId) {
+                  console.log("PREVIOUSLY IN GAME, CLEAR THE BROWSER")
+                  lastId = null
+                  sendDataToRenderer("clearGameDetails")
+                }
+            }
+            
+            else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
+                console.log(placeId)
+                const placeData = await setPresence(client, placeId).catch(err => console.error(err))
+                console.log("Updated presence")
+                lastId = placeId
+                isPlaying = true
+                sendDataToRenderer("gameDetails", placeData)
+            }
+            
+            else {
+                console.log("Still in game")
+            }
+        }, 5e3)
+      }
+    })
+    
+    if (process.platform === "win32") {
+        app.setAppUserModelId(app.name);
+    }
+    
+    app.on("window-all-closed", () => {
+        if (process.platform !== "darwin") {
+            if (mainWindow && !mainWindow.isDestroyed()) {
+              mainWindow.hide()
             }
         }
-        
-        else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
-            console.log(placeId)
-            const placeData = await setPresence(client, placeId).catch(err => console.error(err))
-            console.log("Updated presence")
-            lastId = placeId
-            isPlaying = true
-            sendDataToRenderer("gameDetails", placeData)
-        }
-        
-        else {
-            console.log("Still in game")
-        }
-    }, 5e3)
-  }
-})
-
-if (process.platform === "win32") {
-    app.setAppUserModelId(app.name);
-}
-
-app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
-        if (mainWindow && !mainWindow.isDestroyed()) {
-          mainWindow.hide()
-        }
-    }
-});
-
-ipcMain.on("some-event-from-renderer", (event, data) => {
-  // Handle the event from your main window
-});
-
-client.login({clientId}).catch(async err => {
-  console.error(err)
-  await new Promise(r => setTimeout(r, 2500));
-  sendDataToRenderer("notification", {type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application."})
+    });
+    
+    ipcMain.on("some-event-from-renderer", (event, data) => {
+      // Handle the event from your main window
+    });
+    
+    client.login({clientId}).catch(async err => {
+      console.error(err)
+      sendDataToRenderer("notification", {type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application. Contact @bigblinkzy if this persists."})
+    })
 })
