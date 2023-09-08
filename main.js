@@ -7,6 +7,7 @@ const { findRobloxInfo } = require("./utils/findRobloxInfo");
 const { setPresence } = require("./utils/setPresence");
 const { clientId, cookie } = require("./config.json");
 const { isOutdatedVersion, getClientVersion, getLatestVersion } = require("./utils/checkVersion");
+const sendDataQueue = [];
 let isPlaying = false;
 let lastId;
 let mainWindow;
@@ -21,10 +22,34 @@ const client = new rpc.Client({
 
 const sendDataToRenderer = (label, data) => {
   console.log("Sending data to renderer", data)
-  if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.webContents.send("update-data", {label, data});
-  }
+  return new Promise((resolve) => {
+    sendDataQueue.push({ label, data, resolve });
+
+    // If the queue only contains one item, start processing it
+    if (sendDataQueue.length === 1) {
+      processSendDataQueue();
+    }
+  });
 }
+
+const processSendDataQueue = async () => {
+  while (sendDataQueue.length > 0) {
+    const { label, data, resolve } = sendDataQueue[0];
+    console.log("Sending data to renderer", data);
+    
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send("update-data", { label, data });
+    }
+    
+    // Resolve the promise to signal completion
+    resolve();
+    
+    // Remove the processed item from the queue
+    sendDataQueue.shift();
+  }
+};
+
+
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
@@ -41,8 +66,8 @@ async function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, "./src/index.html"));
 
-  mainWindow.webContents.on("did-finish-load", () => {
-    sendDataToRenderer("notification", {type: "loading", message: "Discord RPC is currently initializing. Please wait."})
+  mainWindow.webContents.on("did-finish-load", async () => {
+    await sendDataToRenderer("notification", {type: "loading", message: "Discord RPC is currently initializing. Please wait."})
   })
   // Handle window closed event
   mainWindow.on("closed", () => {
@@ -60,7 +85,7 @@ async function initData() {
         // This also occurs if rate limited by bloxlink
         // { success: false, reason: "You have reached your API key limit for today. Email cm@blox.link for elevated rates."}
         const notificationData = {type: "warning", message: "Please join the ROBLOX RPC server and verify with Bloxlink to use this application. (https://discord.gg/aq9rwUCQrK)"}
-        sendDataToRenderer("notification", notificationData)
+        await sendDataToRenderer("notification", notificationData)
         return false
     }
 
@@ -69,7 +94,7 @@ async function initData() {
       robloxId = data.robloxId
       const robloxAvatar = await noblox.getPlayerThumbnail(data.robloxId)
       const userData = {roblox: {user: data.robloxUsername, id: data.robloxId, avatar: robloxAvatar[0].imageUrl}, discord: {user: discordUser, id: discordId}}
-      sendDataToRenderer("userDetails", userData)
+      await sendDataToRenderer("userDetails", userData)
       return true
     }
 
@@ -84,9 +109,9 @@ app.whenReady().then(async () => {
     const latestVersion = await getLatestVersion()
     const isOutdated = isOutdatedVersion(latestVersion, clientVersion)
     if (isOutdated) {
-      sendDataToRenderer("notification", {type: "error", message: `A new version is available (${latestVersion}). This version may be broken. Visit https://github.com/ItzBlinkzy/roblox-rpc`})
+      await sendDataToRenderer("notification", {type: "error", message: `A new version is available (${latestVersion}). This version may be broken. Visit https://github.com/ItzBlinkzy/roblox-rpc`})
     }
-    sendDataToRenderer("updateVersion", {version: clientVersion})
+    await sendDataToRenderer("updateVersion", {version: clientVersion})
 
     if (!gotTheLock) {
       // "Application already open"
@@ -96,7 +121,7 @@ app.whenReady().then(async () => {
       console.log("-".repeat(30))
       console.log("RPC Ready")
       console.log("-".repeat(30))
-      sendDataToRenderer("removeElement", {id: "rpc-loading"})
+      await sendDataToRenderer("removeElement", {id: "rpc-loading"})
     
         const isVerified = await initData()
         
@@ -106,7 +131,7 @@ app.whenReady().then(async () => {
         }
 
         catch (e) {
-          sendDataToRenderer("notification", {message: "Could not login with bot account. Please contact @bigblinkzy on Discord.", type: "error"})
+          await sendDataToRenderer("notification", {message: "Could not login with bot account. Please contact @bigblinkzy on Discord.", type: "error"})
         }
     
         if (isVerified) {
@@ -123,7 +148,7 @@ app.whenReady().then(async () => {
                 if (lastId) {
                   console.log("PREVIOUSLY IN GAME, CLEAR THE BROWSER")
                   lastId = null
-                  sendDataToRenderer("clearGameDetails")
+                  await sendDataToRenderer("clearGameDetails")
                 }
             }
             
@@ -133,7 +158,7 @@ app.whenReady().then(async () => {
                 console.log("Updated presence")
                 lastId = placeId
                 isPlaying = true
-                sendDataToRenderer("gameDetails", placeData)
+                await sendDataToRenderer("gameDetails", placeData)
             }
             
             else {
@@ -161,16 +186,16 @@ app.whenReady().then(async () => {
     
     client.login({clientId}).catch(async (err) => {
       console.error(err)
-      sendDataToRenderer("notification", {type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application. Contact @bigblinkzy if this persists."})
+      await sendDataToRenderer("notification", {type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application. Contact @bigblinkzy if this persists."})
     })
 
-    process.on("uncaughtException", (err) => {
-      sendDataToRenderer("notification", {type: "error", message: "An uncaughtException has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
-      sendDataToRenderer("printError", err)
+    process.on("uncaughtException", async (err) => {
+      await sendDataToRenderer("notification", {type: "error", message: "An uncaughtException has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
+      await sendDataToRenderer("printError", err)
     })
     
-    process.on("unhandledRejection", (err) => {
-      sendDataToRenderer("notification", {type: "error", message: "An unhandledRejection has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
-      sendDataToRenderer("printError", err)
+    process.on("unhandledRejection", async (err) => {
+      await sendDataToRenderer("notification", {type: "error", message: "An unhandledRejection has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
+      await sendDataToRenderer("printError", err)
     })
 })
