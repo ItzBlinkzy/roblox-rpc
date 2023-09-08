@@ -9,7 +9,6 @@ const msToMinutesAndSeconds = (ms) => {
 
 const updateNotification = ({ data }) => {
   // can be "type": "error" | "type": "warning" | "type": "loading"
-
   const typeColors = {
     "error": "#ff9494",
     "warning": "#ffff31",
@@ -48,7 +47,9 @@ const updateNotification = ({ data }) => {
   notifWrapper.appendChild(notifEl);
 }
 
-const removeElement = ({data}) => {
+const removeElement = async ({data}) => {
+  // needed to prevent an unknown race condition of removeElement being called before the loading notification is rendered on the html.
+  await new Promise(r => setTimeout(r, 1000))
   const element = document.getElementById(data.id)
   element.remove()
 }

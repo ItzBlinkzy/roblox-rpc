@@ -33,7 +33,6 @@ const sendDataToRenderer = (label, data) => {
 
 const processSendDataQueue = async () => {
     while (sendDataQueue.length > 0) {
-        console.log(sendDataQueue)
         const { label, data, resolve } = sendDataQueue[0];
         console.log("Sending data to renderer ", data);
 
