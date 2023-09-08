@@ -41,6 +41,9 @@ async function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, "./src/index.html"));
 
+  mainWindow.webContents.on("did-finish-load", () => {
+    sendDataToRenderer("notification", {type: "loading", message: "Discord RPC is currently initializing. Please wait."})
+  })
   // Handle window closed event
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -49,22 +52,15 @@ async function createWindow() {
 }
 
 async function initData() {
-  // returns boolean whether user is successfully verified with blox link or not
-
+    // returns boolean whether user is successfully verified with blox link or not
     const discordUser = `@${client.user.username}`
     const discordId = client.user.id
     const data = await findRobloxInfo(discordId)
     if (!data) {
-        // prevent a race condition.
         // This also occurs if rate limited by bloxlink
         // { success: false, reason: "You have reached your API key limit for today. Email cm@blox.link for elevated rates."}
-        console.log("Not verified with Bloxlink.")
-        // await shell.openExternal("https://blox.link")
-        const notificationData = {type: "warning", message: "Not verified with Bloxlink! Please visit https://blox.link to verify." }
-        console.log("SENDING NOTIFICATION DATA")
+        const notificationData = {type: "warning", message: "Please join the ROBLOX RPC server and verify with Bloxlink to use this application. (https://discord.gg/aq9rwUCQrK)"}
         sendDataToRenderer("notification", notificationData)
-        // app.quit()
-        // process.exit(1)
         return false
     }
 
@@ -79,9 +75,10 @@ async function initData() {
 
 }
 
-
 app.whenReady().then(async () => {
-    console.log("Electron Ready")
+    console.log("-".repeat(30))
+    console.log("Electron is ready.")
+    console.log("-".repeat(30))
     await createWindow()
     const clientVersion = await getClientVersion()
     const latestVersion = await getLatestVersion()
@@ -90,17 +87,16 @@ app.whenReady().then(async () => {
       sendDataToRenderer("notification", {type: "error", message: `A new version is available (${latestVersion}). This version may be broken. Visit https://github.com/ItzBlinkzy/roblox-rpc`})
     }
     sendDataToRenderer("updateVersion", {version: clientVersion})
-    // checkClientVersion()
 
     if (!gotTheLock) {
-      // "Application already open",
+      // "Application already open"
         app.quit()
     }
     client.on("ready", async () => {
-        console.log("RPC Ready")
-    
-        // possibly send data to renderer here saying rpc ready and if it doesnt show on renderer
-        // it means that rpc had internal error.
+      console.log("-".repeat(30))
+      console.log("RPC Ready")
+      console.log("-".repeat(30))
+      sendDataToRenderer("removeElement", {id: "rpc-loading"})
     
         const isVerified = await initData()
         
@@ -167,14 +163,14 @@ app.whenReady().then(async () => {
       console.error(err)
       sendDataToRenderer("notification", {type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application. Contact @bigblinkzy if this persists."})
     })
-})
 
-process.on("uncaughtException", (err) => {
-  sendDataToRenderer("notification", {type: "error", message: "An uncaughtException has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
-  sendDataToRenderer("printError", err)
-})
-
-process.on("unhandledRejection", (err) => {
-  sendDataToRenderer("notification", {type: "error", message: "An unhandledRejection has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
-  sendDataToRenderer("printError", err)
+    process.on("uncaughtException", (err) => {
+      sendDataToRenderer("notification", {type: "error", message: "An uncaughtException has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
+      sendDataToRenderer("printError", err)
+    })
+    
+    process.on("unhandledRejection", (err) => {
+      sendDataToRenderer("notification", {type: "error", message: "An unhandledRejection has occured in the main process. Please try again. Contact @bigblinkzy if this persists."})
+      sendDataToRenderer("printError", err)
+    })
 })

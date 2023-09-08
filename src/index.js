@@ -8,11 +8,12 @@ const msToMinutesAndSeconds = (ms) => {
 };
 
 const updateNotification = ({ data }) => {
-  // can be "type": "error" | "type": "warning"
+  // can be "type": "error" | "type": "warning" | "type": "loading"
 
   const typeColors = {
     "error": "#ff9494",
-    "warning": "#ffff31"
+    "warning": "#ffff31",
+    "loading": "#9cdef1"
   }
 
   const notifEl = document.createElement("div");
@@ -22,14 +23,23 @@ const updateNotification = ({ data }) => {
 
   const closeBtn = document.createElement("button");
   closeBtn.classList.add("close-btn");
-  closeBtn.addEventListener("click", () => {
-    const notif = closeBtn.parentElement
-    notif.style.display = "none"
-  })
+
+  if (data.type !== "loading") {
+    closeBtn.addEventListener("click", () => {
+      const notif = closeBtn.parentElement
+      notif.style.display = "none"
+    })
+  }
 
   const closeIcon = document.createElement("i");
-  closeIcon.classList.add("fas", "fa-times");
 
+  if (data.type !== "loading") {
+    closeIcon.classList.add("fas", "fa-times");
+  }
+  else {
+    closeIcon.classList.add("fa-solid", "fa-spinner", "fa-spin");
+    notifEl.id = "rpc-loading"
+  }
   closeBtn.appendChild(closeIcon);
 
   notifEl.appendChild(closeBtn);
@@ -38,12 +48,17 @@ const updateNotification = ({ data }) => {
   notifWrapper.appendChild(notifEl);
 }
 
+const removeElement = ({data}) => {
+  const element = document.getElementById(data.id)
+  element.remove()
+}
+
 const updateUserDetails = ({data}) => {
   /* 
   Shape: {roblox: {user: robloxUsername, id: robloxId, avatar: avatarIcon}, discord: {discordUser, discordUser}}
 
   */
-  const {roblox, discord, avatar} = data
+  const {roblox, discord} = data
   console.log(roblox, discord)
   document.getElementById("roblox-user").textContent = roblox.user
   document.getElementById("roblox-id").textContent = roblox.id
@@ -82,8 +97,8 @@ const clearGameDetails = () => {
   elapsedTime.textContent = "N/A"
 }
 
-const printError = ({err}) => {
-  console.log(err)
+const printError = (data) => {
+  console.log(data)
 }
 
 
@@ -103,7 +118,8 @@ const messageType = {
   gameDetails: updateGameDetails,
   clearGameDetails: clearGameDetails,
   updateVersion: updateVersion,
-  printError: printError
+  printError: printError,
+  removeElement: removeElement
 }
 
 
