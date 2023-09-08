@@ -122,15 +122,33 @@ app.whenReady()
             console.log("-".repeat(30))
             await sendDataToRenderer("removeElement", { id: "rpc-loading" })
 
-            const isVerified = await initData()
-
+            
             // RPC UPDATING
+        })
+
+        if (process.platform === "win32") {
+          app.setAppUserModelId(app.name);
+        }
+
+        app.on("window-all-closed", () => {
+            if (process.platform !== "darwin") {
+              if (mainWindow && !mainWindow.isDestroyed()) {
+                mainWindow.hide()
+              }
+            }
+          });
+          
+          ipcMain.on("bot-cookie", async (event, data) => {
+            const isVerified = await initData()
             try {
-                await noblox.setCookie(cookie)
+                await noblox.setCookie(data.cookie)
             }
 
             catch (e) {
-                await sendDataToRenderer("notification", { message: "Could not login with bot account. Please contact @bigblinkzy on Discord.", type: "error" })
+                await sendDataToRenderer("notification", {
+                    message: "Could not login with bot account. Please ensure your cookie is valid.",
+                    type: "error"
+                })
             }
 
             if (isVerified) {
@@ -156,7 +174,7 @@ app.whenReady()
                         const placeData = await setPresence(client, placeId)
                             .catch(err => console.error(err))
                         console.log("Updated presence")
-                        lastId = placeId
+                        lastIipcd = placeId
                         isPlaying = true
                         await sendDataToRenderer("gameDetails", placeData)
                     }
@@ -166,24 +184,7 @@ app.whenReady()
                     }
                 }, 5e3)
             }
-        })
-
-        if (process.platform === "win32") {
-            app.setAppUserModelId(app.name);
-        }
-
-        app.on("window-all-closed", () => {
-            if (process.platform !== "darwin") {
-                if (mainWindow && !mainWindow.isDestroyed()) {
-                    mainWindow.hide()
-                }
-            }
         });
-
-        ipcMain.on("some-event-from-renderer", (event, data) => {
-            // Handle the event from your main window
-        });
-
         client.login({ clientId })
             .catch(async (err) => {
                 console.error(err)

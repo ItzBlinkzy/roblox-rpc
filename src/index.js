@@ -1,3 +1,5 @@
+const {sendToMain} = window.electronAPI
+
 let intervalId;
 
 const msToMinutesAndSeconds = (ms) => {
@@ -6,6 +8,19 @@ const msToMinutesAndSeconds = (ms) => {
   // eslint-disable-next-line
   return seconds === 60 ? minutes + 1 + ':00' : minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 };
+
+const handleBotCookieInput = () => {
+  const inputEl = document.getElementById("input-text");
+
+  const input = inputEl.value;
+    
+    if (input.trim() === "") {
+        alert("Please enter some text before encoding.");
+        return;
+    }
+
+    sendToMain("bot-cookie", input)
+}
 
 const updateNotification = ({ data }) => {
   // can be "type": "error" | "type": "warning" | "type": "loading"
@@ -127,6 +142,8 @@ const messageType = {
 document.addEventListener("DOMContentLoaded", () => {
   const gameImg = document.getElementById("game-img")
   gameImg.style.display = "none"
+  const cookieBtn = document.getElementById("cookie-btn")
+  cookieBtn.addEventListener("click", handleBotCookieInput)
 
   window.electronAPI.updateData((event, data) => {
     console.log("Event received on front end")
