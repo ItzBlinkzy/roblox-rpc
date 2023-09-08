@@ -4,8 +4,8 @@
 
 **ROBLOX RPC** integrates Discord Rich Presence with the ROBLOX API to find the current game on ROBLOX you're playing.
 
-![example](https://user-images.githubusercontent.com/68260779/208825844-fd52ffec-50cf-4ede-9f08-460dd26d52b6.png)
-![example2](https://user-images.githubusercontent.com/68260779/208825994-a04c9a69-322d-4e8e-97cf-b8316426143f.png)
+![example](https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/f15927e0-47e5-4de1-a803-5726aa4ee3cb)
+![example2](https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/2a92818e-d15e-40c7-8024-1793de5851cd)
 
 ### This is an alternative to [ro-presence](https://github.com/JiveOff/roPresence).
 
@@ -19,18 +19,21 @@
 
 ## How to use
 
-1. Make sure to follow [RobloxDiscRPC](https://www.roblox.com/users/2485537594/profile) on ROBLOX and set your `Who can join me?` privacy settings to `Friends and Users I Follow`.
-2. Verify using [Bloxlink](https://blox.link) with the account used to follow above ^.
-3. Make sure Discord is open before running the application.
+1. Make sure to follow [RobloxDiscRPC](https://www.roblox.com/users/2485537594/profile) on ROBLOX.
+
+2. Go to your privacy settings and set your `Who can join me?` privacy settings to `Friends and Users I Follow`.
+   <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/b3ced2a9-9513-476a-ba41-3bfb9f5b07c5" width="600px" height="150"/>
+
+3. Join the [ROBLOX RPC Discord Server](https://discord.com/invite/) to allow Bloxlink to retrieve your roblox details.
+4. Verify using [Bloxlink](https://blox.link) with the account used to join the Discord Server.
+5. Make sure Discord is open before running the application.
 
 ## Installation of exe
 
 1. Download the latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) here.
-2. Follow the basic setup instructions.
+2. Run **roblox-rpc.exe**. _(refer to the FAQ section to confirm the application is running)_
 
-<img src="https://user-images.githubusercontent.com/68260779/208254672-14fc90c1-50be-4136-81c2-78524a78ba3b.png" alt="installation" width="450"/>
-
-3. Run **roblox-rpc.exe**. _(refer to the FAQ section to confirm the application is running)_
+<img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/ac7f6499-9329-47b9-ac01-949b6aa813e8" width="100" height="25"/>
 
 ## Running application locally
 
@@ -59,32 +62,36 @@ Much more effort needed however.
 }
 ```
 
-- The `apiKey` comes from [Bloxlink](https://blox.link) you will have to go to their website and get one.
-- The `clientId` is my Discord Application ID, you can make one yourself and replace if wanted, but there is no need.
-- The `cookie` comes from a "bot" account. You will have to create this bot account in an **incognito window** because logging out in a normal window will stop the cookie from working. Take the .ROBLOSECURITY Cookie and place it here **(REMEMBER THE NAME OF THIS ACCOUNT!)**. Once done you may close the incognito window. _(Don't log out of the account)_
+- The `apiKey` is a guild api key from [Bloxlink](https://blox.link) you will have to go to their website and get one.
+- The `clientId` is my Discord Application ID, you don't need to change it unless you want to.
+- The `cookie` comes from a "bot" account that will track what game you're in. You will have to create this bot account in an **incognito window** because logging out in a normal window will stop the cookie from working. Take the .ROBLOSECURITY Cookie and place it here **REMEMBER THE NAME OF THIS ACCOUNT!** _(Don't log out of the account, just close the window.)_
 
-4. You will need to follow the account you just created with your main ROBLOX account and then set the privacy settings to `Friends and Users I Follow`.
+4. You will need to follow the account you just created with your main ROBLOX account that you wanted tracked and then set the privacy settings to `Friends and Users I Follow`.
 5. Go back to your editor and run `npm install` to get all the packages that are required.
-6. Run the program using `electron src/index.js`. Make sure you are in the correct path.
+6. Run the program using `electron ./main.js`. Make sure you are in the correct path.
+
+_If you want to create your own exe, use `npm run make` and **electron-forge** should make your exe and store it in `out` folder. (located in the root of the repository)._
 
 ## FAQ
 
 - **_How do I know it's running?_**
-  - It should appear as an icon (in your system tray) at the right side of your taskbar.
-    <img src="https://user-images.githubusercontent.com/68260779/208254798-7b04920f-44a3-49fc-a676-f67293c3ae33.png"
-    alt="installation" width="150"/>
-- **_What account am I verified with?_**
 
-  - When you click the system tray icon, the relevant information will be shown.
-    Clicking these will display a notification that shows the ROBLOX Username and Discord Tag being tracked.
-    <img src="https://user-images.githubusercontent.com/68260779/208254818-63a48193-8f71-4d26-917b-dc70a7d41c8f.png" alt="installation" width="150"/>
+  - A window should pop up and load your ROBLOX and Discord account name and id's showing you which accounts you are verified with.
+
+  <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/6ad5a69b-1854-4619-b845-b19c195fc3d1"
+    alt="installation" width="500" height="300"/>
+
+- **_Do I need the window open for the RPC to work on Discord?_**
+  - Closing the window will close the application, however you can minimize the window and it will work fine.
 
 - **_Can I use this on MacOS?_**
-  - Currently this has only been tested on Windows. Downloading this on MacOS might have many bugs.
+
+  - Currently this has only been tested on Windows. Downloading this on MacOS might have many bugs. Or may not work at all
+
 
 ## Issues
 
-Feel free to open an issue or make a pull request if you have any problems using this.
+If you come across any problems using ROBLOX RPC feel free to ask help in the [Discord Server](https://discord.com/invite/aq9rwUCQrK) or submit an [issue](https://github.com/ItzBlinkzy/roblox-rpc/issues).
 
 ## Credits
 

@@ -187,6 +187,8 @@ app.whenReady().then(async () => {
     client.login({clientId}).catch(async (err) => {
       console.error(err)
       await sendDataToRenderer("notification", {type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application. Contact @bigblinkzy if this persists."})
+      await sendDataToRenderer("removeElement", {id: "rpc-loading"})
+
     })
 
     process.on("uncaughtException", async (err) => {
