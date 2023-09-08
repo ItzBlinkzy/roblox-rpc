@@ -152,7 +152,7 @@ app.whenReady()
                     }
 
                     else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
-                        console.log(placeId)
+                        console.log(`User in ${placeId}`)
                         const placeData = await setPresence(client, placeId)
                             .catch(err => console.error(err))
                         console.log("Updated presence")

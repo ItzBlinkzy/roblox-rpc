@@ -56,7 +56,7 @@ const removeElement = async ({data}) => {
 
 const updateUserDetails = ({data}) => {
   /* 
-  Shape: {roblox: {user: robloxUsername, id: robloxId, avatar: avatarIcon}, discord: {discordUser, discordUser}}
+  Shape: {roblox: {user: robloxUsername, id: robloxId, avatar: avatarIcon}, discord: {user: userId, id: discordId}}
 
   */
   const {roblox, discord} = data

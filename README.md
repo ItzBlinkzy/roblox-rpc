@@ -22,9 +22,9 @@
 1. Make sure to follow [RobloxDiscRPC](https://www.roblox.com/users/2485537594/profile) on ROBLOX.
 
 2. Go to your privacy settings and set your `Who can join me?` privacy settings to `Friends and Users I Follow`.
-   <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/dc5645db-e3b1-434d-aea3-904259e1ce8f" width="600px" height="150"/>
+   <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/dc5645db-e3b1-434d-aea3-904259e1ce8f" width="650" height="100"/>
 
-3. Join the [ROBLOX RPC Discord Server](https://discord.com/invite/) to allow Bloxlink to retrieve your roblox details.
+3. Join the [ROBLOX RPC Discord Server](https://discord.com/invite/) to allow Bloxlink to retrieve your roblox information while using ROBLOX RPC.
 4. Verify using [Bloxlink](https://blox.link) with the account used to join the Discord Server.
 5. Make sure Discord is open before running the application.
 
@@ -35,7 +35,7 @@
 
 <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/ac7f6499-9329-47b9-ac01-949b6aa813e8" width="100" height="25"/>
 
-## Running application locally
+# Running application locally
 
 **_If you do not want to download the exe file, you can run this application locally._**
 Much more effort needed however.
@@ -64,11 +64,15 @@ Much more effort needed however.
 
 - The `apiKey` is a guild api key from [Bloxlink](https://blox.link) you will have to go to their website and get one.
 - The `clientId` is my Discord Application ID, you don't need to change it unless you want to.
-- The `cookie` comes from a "bot" account that will track what game you're in. You will have to create this bot account in an **incognito window** because logging out in a normal window will stop the cookie from working. Take the .ROBLOSECURITY Cookie and place it here **REMEMBER THE NAME OF THIS ACCOUNT!** _(Don't log out of the account, just close the window.)_
+- The `cookie` comes from a "bot" account that will track what game you're in. You will have to create this roblox bot account in an **incognito window** because logging out in a normal window will stop the cookie from working. Take the .ROBLOSECURITY Cookie and place it here **REMEMBER THE NAME OF THIS ACCOUNT!** _(Now don't log out of the account, just close the window.)_
 
-4. You will need to follow the account you just created with your main ROBLOX account that you wanted tracked and then set the privacy settings to `Friends and Users I Follow`.
-5. Go back to your editor and run `npm install` to get all the packages that are required.
-6. Run the program using `electron ./main.js`. Make sure you are in the correct path.
+---
+
+1. You will need to follow the account you just created with your main ROBLOX account that you wanted tracked and then set the privacy settings to `Friends and Users I Follow`.
+
+2. Go back to your editor and run `npm install` to get all the packages that are required.
+
+3. Run the program using `electron ./main.js`. Make sure you are in the correct path.
 
 _If you want to create your own exe, use `npm run make` and **electron-forge** should make your exe and store it in `out` folder. (located in the root of the repository)._
 
@@ -87,7 +91,7 @@ _If you want to create your own exe, use `npm run make` and **electron-forge** s
 
 - **_Can I use this on MacOS?_**
 
-  - Currently this has only been tested on Windows. Downloading this on MacOS might have many bugs. Or may not work at all
+  - Currently this has only been tested on Windows. Downloading this on MacOS **or any other operating systems** might have many bugs or may not work at all.
 
 ## Issues
 
