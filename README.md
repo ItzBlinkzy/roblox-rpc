@@ -22,7 +22,7 @@
 1. Make sure to follow [RobloxDiscRPC](https://www.roblox.com/users/2485537594/profile) on ROBLOX.
 
 2. Go to your privacy settings and set your `Who can join me?` privacy settings to `Friends and Users I Follow`.
-   <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/b3ced2a9-9513-476a-ba41-3bfb9f5b07c5" width="600px" height="150"/>
+   <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/dc5645db-e3b1-434d-aea3-904259e1ce8f" width="600px" height="150"/>
 
 3. Join the [ROBLOX RPC Discord Server](https://discord.com/invite/) to allow Bloxlink to retrieve your roblox details.
 4. Verify using [Bloxlink](https://blox.link) with the account used to join the Discord Server.
@@ -82,12 +82,12 @@ _If you want to create your own exe, use `npm run make` and **electron-forge** s
     alt="installation" width="500" height="300"/>
 
 - **_Do I need the window open for the RPC to work on Discord?_**
+
   - Closing the window will close the application, however you can minimize the window and it will work fine.
 
 - **_Can I use this on MacOS?_**
 
   - Currently this has only been tested on Windows. Downloading this on MacOS might have many bugs. Or may not work at all
-
 
 ## Issues
 
