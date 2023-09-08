@@ -68,6 +68,13 @@ async function createWindow() {
 
   mainWindow.webContents.on("did-finish-load", async () => {
     await sendDataToRenderer("notification", {type: "loading", message: "Discord RPC is currently initializing. Please wait."})
+    const clientVersion = await getClientVersion()
+    const latestVersion = await getLatestVersion()
+    const isOutdated = isOutdatedVersion(latestVersion, clientVersion)
+    if (isOutdated) {
+      await sendDataToRenderer("notification", {type: "error", message: `A new version is available (${latestVersion}). This version may be broken. Visit https://github.com/ItzBlinkzy/roblox-rpc`})
+    }
+    await sendDataToRenderer("updateVersion", {version: clientVersion})
   })
   // Handle window closed event
   mainWindow.on("closed", () => {
@@ -105,14 +112,6 @@ app.whenReady().then(async () => {
     console.log("Electron is ready.")
     console.log("-".repeat(30))
     await createWindow()
-    const clientVersion = await getClientVersion()
-    const latestVersion = await getLatestVersion()
-    const isOutdated = isOutdatedVersion(latestVersion, clientVersion)
-    if (isOutdated) {
-      await sendDataToRenderer("notification", {type: "error", message: `A new version is available (${latestVersion}). This version may be broken. Visit https://github.com/ItzBlinkzy/roblox-rpc`})
-    }
-    await sendDataToRenderer("updateVersion", {version: clientVersion})
-
     if (!gotTheLock) {
       // "Application already open"
         app.quit()
