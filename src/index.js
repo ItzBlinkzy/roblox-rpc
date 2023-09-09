@@ -19,7 +19,7 @@ const handleBotCookieInput = () => {
         return;
     }
 
-    sendToMain("bot-cookie", input)
+    sendToMain("bot-cookie", {cookie: input})
 }
 
 const updateNotification = ({ data }) => {
@@ -64,6 +64,15 @@ const updateNotification = ({ data }) => {
 
 const removeElement = async ({data}) => {
   // needed to prevent an unknown race condition of removeElement being called before the loading notification is rendered on the html.
+  // remove "sleep" then dio this
+  /*
+
+  elemnt = doc.getleemn...
+
+  if not element
+    settimouut(2000, removeelement(id passed in))
+
+  */
   await new Promise(r => setTimeout(r, 1000))
   const element = document.getElementById(data.id)
   element.remove()
@@ -128,6 +137,31 @@ const updateVersion = ({data}) => {
   versionNum.textContent = data.version
 } 
 
+const createInput = () => {
+  const cookieContainer = document.createElement("div");
+  cookieContainer.id = "cookie-container"
+
+  const botCookieDiv = document.createElement("div");
+  botCookieDiv.textContent = "Bot Cookie";
+
+  const textarea = document.createElement("textarea");
+  textarea.id = "input-text";
+  textarea.placeholder = "_WARNINGDO-NOT-SHARE......";
+
+  const cookieBtn = document.createElement("button");
+  cookieBtn.addEventListener("click", handleBotCookieInput)
+  cookieBtn.id = "cookie-btn";
+  cookieBtn.textContent = "Send Bot Cookie";
+
+  // Append the elements to the main container
+  cookieContainer.appendChild(botCookieDiv);
+  cookieContainer.appendChild(textarea);
+  cookieContainer.appendChild(cookieBtn);
+
+  const wrapperEl = document.getElementById("wrapper");
+  wrapperEl.insertBefore(cookieContainer, wrapperEl.firstChild);
+}
+
 const messageType = {
   notification: updateNotification,
   userDetails: updateUserDetails,  
@@ -135,16 +169,15 @@ const messageType = {
   clearGameDetails: clearGameDetails,
   updateVersion: updateVersion,
   printError: printError,
-  removeElement: removeElement
+  removeElement: removeElement,
+  createInput: createInput
 }
 
 
 document.addEventListener("DOMContentLoaded", () => {
   const gameImg = document.getElementById("game-img")
   gameImg.style.display = "none"
-  const cookieBtn = document.getElementById("cookie-btn")
-  cookieBtn.addEventListener("click", handleBotCookieInput)
-
+  
   window.electronAPI.updateData((event, data) => {
     console.log("Event received on front end")
     const funcToRun = messageType[data.label]

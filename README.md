@@ -24,7 +24,7 @@
 2. Go to your privacy settings and set your `Who can join me?` privacy settings to `Friends and Users I Follow`.
    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/dc5645db-e3b1-434d-aea3-904259e1ce8f" width="650" height="100"/>
 
-3. Join the [ROBLOX RPC Discord Server](https://discord.com/invite/) to allow Bloxlink to retrieve your roblox information while using ROBLOX RPC.
+3. Join the [ROBLOX RPC Discord Server](https://discord.com/invite/aq9rwUCQrK) to allow Bloxlink to retrieve your roblox information while using ROBLOX RPC.
 4. Verify using [Bloxlink](https://blox.link) with the account used to join the Discord Server.
 5. Make sure Discord is open before running the application.
 

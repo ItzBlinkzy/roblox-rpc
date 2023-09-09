@@ -5,8 +5,9 @@ const path = require("path");
 const { getPlaceId } = require("./utils/getPlaceId");
 const { findRobloxInfo } = require("./utils/findRobloxInfo");
 const { setPresence } = require("./utils/setPresence");
-const { clientId, cookie } = require("./config.json");
+const { clientId } = require("./config.json");
 const { isOutdatedVersion, getClientVersion, getLatestVersion } = require("./utils/checkVersion");
+const {readLocalData, writeLocalData} = require("./utils/localData")
 const sendDataQueue = [];
 let isPlaying = false;
 let lastId;
@@ -47,6 +48,60 @@ const processSendDataQueue = async () => {
         sendDataQueue.shift();
     }
 };
+
+ async function initRobloxPresence(cookie) {
+
+    try {
+        await noblox.setCookie(cookie)
+
+        setInterval(async () => {
+            const placeId = await getPlaceId(robloxId)
+            const isInDifferentGame = (lastId !== placeId)
+    
+            if (placeId === -1) {
+                console.log("Not in a game, clearing presence.")
+                await client.clearActivity()
+                isPlaying = false
+    
+                // they were previously in a game
+                if (lastId) {
+                    console.log("PREVIOUSLY IN GAME, CLEAR THE BROWSER")
+                    lastId = null
+                    await sendDataToRenderer("clearGameDetails")
+                }
+            }
+    
+            else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
+                console.log(`User in ${placeId}`)
+                const placeData = await setPresence(client, placeId)
+                    .catch(err => console.error(err))
+                console.log("Updated presence")
+                lastId = placeId
+                isPlaying = true
+                await sendDataToRenderer("gameDetails", placeData)
+            }
+    
+            else {
+                console.log("Still in game")
+            }
+        }, 5e3)
+    }
+    
+    catch (err) {
+      sendDataToRenderer("printError", err)
+      return false
+    }
+
+    return true
+  }
+
+function getLocalCookie() {
+  const data = readLocalData()
+  if (!data) {
+    return false
+  }
+  return data.cookie
+}
 
 
 
@@ -122,8 +177,16 @@ app.whenReady()
             console.log("-".repeat(30))
             await sendDataToRenderer("removeElement", { id: "rpc-loading" })
 
-            
-            // RPC UPDATING
+            const cookie = getLocalCookie()
+
+            if (!cookie) {
+              sendDataToRenderer("createInput")
+            }
+
+            else {
+              const isVerified = await initData()
+              const validCookie = initRobloxPresence(cookie) 
+            }
         })
 
         if (process.platform === "win32") {
@@ -139,51 +202,23 @@ app.whenReady()
           });
           
           ipcMain.on("bot-cookie", async (event, data) => {
-            const isVerified = await initData()
-            try {
-                await noblox.setCookie(data.cookie)
+            
+            await initData()
+            const success = await initRobloxPresence(data.cookie)
+
+            if (success) {
+              // save cookie locally to stop having to send everytime on startup once
+              await sendDataToRenderer("removeElement", {id: "cookie-container"})
             }
 
-            catch (e) {
-                await sendDataToRenderer("notification", {
-                    message: "Could not login with bot account. Please ensure your cookie is valid.",
-                    type: "error"
-                })
+            else {
+              // cookie was invalid
+              await sendDataToRenderer("notification", {
+                message: "Could not login with bot account. Please ensure your cookie is valid.",
+                type: "error"
+              })
             }
-
-            if (isVerified) {
-                setInterval(async () => {
-                    const placeId = await getPlaceId(robloxId)
-                    const isInDifferentGame = (lastId !== placeId)
-
-                    if (placeId === -1) {
-                        console.log("Not in a game, clearing presence.")
-                        await client.clearActivity()
-                        isPlaying = false
-
-                        // they were previously in a game
-                        if (lastId) {
-                            console.log("PREVIOUSLY IN GAME, CLEAR THE BROWSER")
-                            lastId = null
-                            await sendDataToRenderer("clearGameDetails")
-                        }
-                    }
-
-                    else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
-                        console.log(`User in ${placeId}`)
-                        const placeData = await setPresence(client, placeId)
-                            .catch(err => console.error(err))
-                        console.log("Updated presence")
-                        lastIipcd = placeId
-                        isPlaying = true
-                        await sendDataToRenderer("gameDetails", placeData)
-                    }
-
-                    else {
-                        console.log("Still in game")
-                    }
-                }, 5e3)
-            }
+      
         });
         client.login({ clientId })
             .catch(async (err) => {
