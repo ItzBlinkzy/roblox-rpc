@@ -12,11 +12,15 @@ const msToMinutesAndSeconds = (ms) => {
 const handleBotCookieInput = () => {
   const inputEl = document.getElementById("input-text");
 
-  const input = inputEl.value;
+  const input = (inputEl.value).trim();
     
-    if (input.trim() === "") {
-        alert("Please enter some text before encoding.");
+    if (input === "") {
+        alert("Enter the cookie before sending.");
         return;
+    }
+
+    if (!input.startsWith("_|WARNING:-DO-NOT-SHARE-THIS.")) {
+      alert("Please enter the entire cookie including the warning.")
     }
 
     sendToMain("bot-cookie", {cookie: input})
@@ -27,7 +31,8 @@ const updateNotification = ({ data }) => {
   const typeColors = {
     "error": "#ff9494",
     "warning": "#ffff31",
-    "loading": "#9cdef1"
+    "loading": "#9cdef1",
+    "success": "#52f795"
   }
 
   const notifEl = document.createElement("div");
@@ -63,17 +68,7 @@ const updateNotification = ({ data }) => {
 }
 
 const removeElement = async ({data}) => {
-  // needed to prevent an unknown race condition of removeElement being called before the loading notification is rendered on the html.
-  // remove "sleep" then dio this
-  /*
-
-  elemnt = doc.getelementbyid(data.id)...
-
-  if not element
-    settimouut(2000, removeelement(id passed in))
-
-  */
- console.log(`Removing element. id: ${data.id}`)
+  console.log(`Removing element. id: ${data.id}`)
   await new Promise(r => setTimeout(r, 2000))
   const element = document.getElementById(data.id)
   element.remove()
@@ -107,10 +102,12 @@ const updateGameDetails = ({data}) => {
   gameImg.style.display = "block"
   gameTitle.textContent = data.gameName
 
-  intervalId = setInterval(() => {
-    const ms = Date.now() - data.currentTime
-    elapsedTime.textContent = msToMinutesAndSeconds(ms)
-  }, 1000)
+  if (!intervalId) {
+    intervalId = setInterval(() => {
+      const ms = Date.now() - data.currentTime
+      elapsedTime.textContent = msToMinutesAndSeconds(ms)
+    }, 1000)
+  }
 }
 
 
@@ -151,11 +148,11 @@ const createInput = () => {
 
   const description = document.createElement('div');
   description.id = 'cookie-description';
-  description.textContent = 'Enter the cookie of the bot account you created here. If you are not sure how to retrieve the cookie, refer to the README of the repository or ask in the Discord Server (https://discord.com/invite/linkhere)</a>.';
+  description.textContent = 'Enter the cookie of the bot account you created here. If you are not sure how to retrieve the cookie, refer to the README of the repository or ask in the Discord Server (https://discord.com/invite/aq9rwUCQrK).';
 
   const textarea = document.createElement("textarea");
   textarea.id = "input-text";
-  textarea.placeholder = "_WARNINGDO-NOT-SHARE......";
+  textarea.placeholder = "_|WARNING:-DO-NOT-SHARE-THIS.";
 
 
   const cookieBtn = document.createElement("button");

@@ -9,6 +9,7 @@ const { clientId } = require("./config.json");
 const { isOutdatedVersion, getClientVersion, getLatestVersion } = require("./utils/checkVersion");
 const {readLocalData, writeLocalData} = require("./utils/localData")
 const sendDataQueue = [];
+const COOKIE_BOT_DEBOUNCE_TIME = 800
 let isPlaying = false;
 let lastId;
 let mainWindow;
@@ -161,6 +162,37 @@ async function initData() {
 
 }
 
+function debounce(func, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+
+const debouncedBotCookieHandler = debounce(async (event, data) => {
+  if (!robloxId) {
+    initData()
+  }
+  const isValidCookie = await initRobloxPresence(data.cookie)
+
+  if (isValidCookie) {
+    // save cookie locally to stop having to send everytime on startup once
+    writeLocalData({cookie: data.cookie})
+    await sendDataToRenderer("removeElement", {id: "cookie-container"})
+  }
+
+  else {
+    // cookie was invalid
+    await sendDataToRenderer("notification", {
+      message: "Could not login with bot account. Please ensure your cookie is valid.",
+      type: "error"
+    })
+  }
+}, COOKIE_BOT_DEBOUNCE_TIME)
+
 app.whenReady()
     .then(async () => {
         console.log("-".repeat(30))
@@ -206,26 +238,7 @@ app.whenReady()
           });
           
           ipcMain.on("bot-cookie", async (event, data) => {
-            
-            if (!robloxId) {
-              initData()
-            }
-            const isValidCookie = await initRobloxPresence(data.cookie)
-
-            if (isValidCookie) {
-              // save cookie locally to stop having to send everytime on startup once
-              writeLocalData({cookie: data.cookie})
-              await sendDataToRenderer("removeElement", {id: "cookie-container"})
-            }
-
-            else {
-              // cookie was invalid
-              await sendDataToRenderer("notification", {
-                message: "Could not login with bot account. Please ensure your cookie is valid.",
-                type: "error"
-              })
-            }
-      
+            debouncedBotCookieHandler(event, data)
         });
         client.login({ clientId })
             .catch(async (err) => {
