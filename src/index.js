@@ -67,16 +67,20 @@ const removeElement = async ({data}) => {
   // remove "sleep" then dio this
   /*
 
-  elemnt = doc.getleemn...
+  elemnt = doc.getelementbyid(data.id)...
 
   if not element
     settimouut(2000, removeelement(id passed in))
 
   */
-  await new Promise(r => setTimeout(r, 1000))
+ console.log(`Removing element. id: ${data.id}`)
+  await new Promise(r => setTimeout(r, 2000))
   const element = document.getElementById(data.id)
   element.remove()
 }
+
+
+
 
 const updateUserDetails = ({data}) => {
   /* 
@@ -144,17 +148,25 @@ const createInput = () => {
   const botCookieDiv = document.createElement("div");
   botCookieDiv.textContent = "Bot Cookie";
 
+
+  const description = document.createElement('div');
+  description.id = 'cookie-description';
+  description.textContent = 'Enter the cookie of the bot account you created here. If you are not sure how to retrieve the cookie, refer to the README of the repository or ask in the Discord Server (https://discord.com/invite/linkhere)</a>.';
+
   const textarea = document.createElement("textarea");
   textarea.id = "input-text";
   textarea.placeholder = "_WARNINGDO-NOT-SHARE......";
+
 
   const cookieBtn = document.createElement("button");
   cookieBtn.addEventListener("click", handleBotCookieInput)
   cookieBtn.id = "cookie-btn";
   cookieBtn.textContent = "Send Bot Cookie";
 
+
   // Append the elements to the main container
   cookieContainer.appendChild(botCookieDiv);
+  cookieContainer.appendChild(description);
   cookieContainer.appendChild(textarea);
   cookieContainer.appendChild(cookieBtn);
 

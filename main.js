@@ -88,7 +88,7 @@ const processSendDataQueue = async () => {
     }
     
     catch (err) {
-      sendDataToRenderer("printError", err)
+      await sendDataToRenderer("printError", err)
       return false
     }
 
@@ -180,12 +180,16 @@ app.whenReady()
             const cookie = getLocalCookie()
 
             if (!cookie) {
-              sendDataToRenderer("createInput")
+              await sendDataToRenderer("createInput")
             }
 
             else {
-              const isVerified = await initData()
-              const validCookie = initRobloxPresence(cookie) 
+              await initData()
+              const isValidCookie = await initRobloxPresence(cookie) 
+              if (!isValidCookie) {
+                await sendDataToRenderer("notification", {type: "error", message: "Seems like your cookie expired, you will have to login to the account in an incognito window and get a new one. DM @bigblinkzy for help if needed."})
+                await sendDataToRenderer("createInput")
+              }
             }
         })
 
@@ -203,11 +207,14 @@ app.whenReady()
           
           ipcMain.on("bot-cookie", async (event, data) => {
             
-            await initData()
-            const success = await initRobloxPresence(data.cookie)
+            if (!robloxId) {
+              initData()
+            }
+            const isValidCookie = await initRobloxPresence(data.cookie)
 
-            if (success) {
+            if (isValidCookie) {
               // save cookie locally to stop having to send everytime on startup once
+              writeLocalData({cookie: data.cookie})
               await sendDataToRenderer("removeElement", {id: "cookie-container"})
             }
 

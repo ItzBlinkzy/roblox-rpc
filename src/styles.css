@@ -230,3 +230,41 @@ h1 {
   flex-direction: column;
   padding: 0.8em;
 }
+
+#cookie-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  text-align: center;
+}
+
+#cookie-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+#cookie-description {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+#input-text {
+  width: 100%; /* Takes up the full width */
+  min-height: 150px; /* Adjust as needed */
+  padding: 0.5em;
+  font-size: 1rem;
+}
+
+#cookie-btn {
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  background-color: #0078d4; /* Example button color */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#cookie-btn:hover {
+  background-color: #005a9e; /* Example hover color */
+}
