@@ -15,12 +15,12 @@ const handleBotCookieInput = () => {
   const input = (inputEl.value).trim();
     
     if (input === "") {
-        alert("Enter the cookie before sending.");
+      updateNotification({data: {message: "Enter the entire cookie before sending.", type: "warning"}})
         return;
     }
 
     if (!input.startsWith("_|WARNING:-DO-NOT-SHARE-THIS.")) {
-      alert("Please enter the entire cookie including the warning.")
+      updateNotification({data: {message: "Please enter the entire cookie including the warning."}})
     }
 
     sendToMain("bot-cookie", {cookie: input})
@@ -69,7 +69,6 @@ const updateNotification = ({ data }) => {
 
 const removeElement = async ({data}) => {
   console.log(`Removing element. id: ${data.id}`)
-  await new Promise(r => setTimeout(r, 2000))
   const element = document.getElementById(data.id)
   element.remove()
 }
