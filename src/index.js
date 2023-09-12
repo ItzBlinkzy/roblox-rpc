@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameImg.style.display = "none"
   
   window.electronAPI.updateData((event, data) => {
-    console.log("Event received on front end")
+    console.log("Event received on front end", data)
     const funcToRun = messageType[data.label]
     funcToRun(data)
   });

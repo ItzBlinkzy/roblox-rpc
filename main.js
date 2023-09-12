@@ -8,9 +8,12 @@ const { setPresence } = require("./utils/setPresence");
 const { clientId } = require("./config.json");
 const { isOutdatedVersion, getClientVersion, getLatestVersion } = require("./utils/checkVersion");
 const {readLocalData, writeLocalData} = require("./utils/localData")
+
 const sendDataQueue = [];
 const COOKIE_BOT_DEBOUNCE_TIME = 800
+
 let isPlaying = false;
+let isWebContentReady = false;
 let lastId;
 let mainWindow;
 let robloxId;
@@ -49,6 +52,17 @@ const processSendDataQueue = async () => {
         sendDataQueue.shift();
     }
 };
+
+async function processContentRemoval() {
+  if (isWebContentReady) {
+    await sendDataToRenderer("removeElement", {id: "rpc-loading"})
+    
+  } else {
+    // Either condition is not met, retry after a short delay
+    console.log("Not ready to remove rpc-loading yet, webcontent is not loaded.")
+    setTimeout(processContentRemoval, 200); // retry delay
+  }
+}
 
  async function initRobloxPresence(cookie) {
 
@@ -122,6 +136,9 @@ async function createWindow() {
     mainWindow.loadFile(path.join(__dirname, "./src/index.html"));
 
     mainWindow.webContents.on("did-finish-load", async () => {
+        await sendDataToRenderer("printError", {message: `did finish load is ready SETTING VARIABLE ISWEBCONTENTREADY TO TRUE`})
+
+        isWebContentReady = true
         await sendDataToRenderer("notification", { type: "loading", message: "Discord RPC is currently initializing. Please wait." })
         const clientVersion = await getClientVersion()
         const latestVersion = await getLatestVersion()
@@ -207,8 +224,7 @@ app.whenReady()
             console.log("-".repeat(30))
             console.log("RPC Ready")
             console.log("-".repeat(30))
-            await sendDataToRenderer("removeElement", { id: "rpc-loading" })
-
+            processContentRemoval()
             const cookie = getLocalCookie()
 
             if (!cookie) {
