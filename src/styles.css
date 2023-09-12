@@ -276,3 +276,10 @@ textarea:focus {
 #cookie-btn:hover {
   background-color: #005a9e; /* Example hover color */
 }
+
+#cookie-btn:disabled {
+  cursor: not-allowed;
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}

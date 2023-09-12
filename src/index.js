@@ -1,3 +1,4 @@
+
 const {sendToMain} = window.electronAPI
 
 let intervalId;
@@ -20,7 +21,8 @@ const handleBotCookieInput = () => {
     }
 
     if (!input.startsWith("_|WARNING:-DO-NOT-SHARE-THIS.")) {
-      updateNotification({data: {message: "Please enter the entire cookie including the warning."}})
+      updateNotification({data: {message: "Please enter the entire cookie including the warning.", type: "warning"}})
+      return;
     }
 
     sendToMain("bot-cookie", {cookie: input})
@@ -158,6 +160,7 @@ const createInput = () => {
   cookieBtn.addEventListener("click", handleBotCookieInput)
   cookieBtn.id = "cookie-btn";
   cookieBtn.textContent = "Send Bot Cookie";
+  cookieBtn.disabled = true
 
 
   // Append the elements to the main container
@@ -170,6 +173,25 @@ const createInput = () => {
   wrapperEl.insertBefore(cookieContainer, wrapperEl.firstChild);
 }
 
+const enableButton = async (retryCount = 30) => {
+  if (retryCount === 0) {
+    return;
+  }
+
+  console.log("Toggling cookie button");
+  const cookieBtn = document.getElementById("cookie-btn");
+
+  if (!cookieBtn) {
+    console.log("Cookie button not found, will keep checking...");
+    setTimeout(() => enableButton(retryCount - 1), 500); // Check every half second
+    return;
+  }
+
+  // If the cookie button is found, enable it
+  cookieBtn.disabled = false;
+};
+
+
 const messageType = {
   notification: updateNotification,
   userDetails: updateUserDetails,  
@@ -178,7 +200,8 @@ const messageType = {
   updateVersion: updateVersion,
   printError: printError,
   removeElement: removeElement,
-  createInput: createInput
+  createInput: createInput,
+  enableButton: enableButton
 }
 
 
@@ -187,7 +210,6 @@ document.addEventListener("DOMContentLoaded", () => {
   gameImg.style.display = "none"
   
   window.electronAPI.updateData((event, data) => {
-    console.log("Event received on front end", data)
     const funcToRun = messageType[data.label]
     funcToRun(data)
   });
