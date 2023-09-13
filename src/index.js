@@ -173,17 +173,15 @@ const createInput = () => {
   wrapperEl.insertBefore(cookieContainer, wrapperEl.firstChild);
 }
 
-const enableButton = async (retryCount = 30) => {
+const enableButton = async ({retryCount}) => {
+  console.log(retryCount)
   if (retryCount === 0) {
     return;
   }
-
-  console.log("Toggling cookie button");
   const cookieBtn = document.getElementById("cookie-btn");
 
   if (!cookieBtn) {
-    console.log("Cookie button not found, will keep checking...");
-    setTimeout(() => enableButton(retryCount - 1), 500); // Check every half second
+    setTimeout(() => enableButton({retryCount: retryCount - 1}), 500); // Check every half second
     return;
   }
 
@@ -210,7 +208,13 @@ document.addEventListener("DOMContentLoaded", () => {
   gameImg.style.display = "none"
   
   window.electronAPI.updateData((event, data) => {
-    const funcToRun = messageType[data.label]
-    funcToRun(data)
+    console.log(data.label)
+    if (data.label === "enableButton") {
+      enableButton({retryCount: 30})
+    }
+    else {
+      const funcToRun = messageType[data.label]
+      funcToRun(data)
+    }
   });
 })
