@@ -2,6 +2,10 @@
 
 # ROBLOX RPC
 
+### Download the latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) of ROBLOX RPC.
+
+---
+
 **ROBLOX RPC** integrates Discord Rich Presence with the ROBLOX API to find the current game on ROBLOX you're playing.
 
 ![example](https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/a986ef6e-7259-4616-a2e1-962dedc4e2dd)
@@ -14,8 +18,8 @@
 ### How ROBLOX RPC does it.
 
 - **ROBLOX RPC** uses [Bloxlink Verification](https://blox.link) through Discord to find out the account you're verified with and will utilise the ROBLOX API to find the games you're in.
-- You will have to create a new account and use it's cookie . 
-    - This is a "**bot account**" that will be used to track what games you play on a separate account.
+- You will have to create a new account and use it's cookie .
+  - This is a "**bot account**" that will be used to track what games you play on a separate account.
 
 ---
 
@@ -30,17 +34,20 @@
 4. Go to your verified account's **privacy settings** and set your `Who can join me?` privacy settings to `Friends and Users I Follow`.
 
    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/dc5645db-e3b1-434d-aea3-904259e1ce8f" width="650" height="80"/>
+
 5. Return back to the incognito window open the **Dev Tools** (inspect element) and go to Application tab then, go to cookies.
    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/71ccb62c-3f49-476d-be9c-c82fa49c3469" width="800" height="310"/>
 6. Right click and **copy the .ROBLOSECURITY value** including the warning and paste it into ROBLOX RPC's bot cookie input.
 
-    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/c16594ef-9ba1-4c10-b4e3-9c7d5fe34363" width="300" height="225" sty/>
+<img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/c16594ef-9ba1-4c10-b4e3-9c7d5fe34363" width="300" height="225" sty/>
+
 7. Finally close the incognito window **(DONT CLICK LOG OUT)**
+
 ## Installation of exe
 
 1. Download the latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) here.
 2. Run **roblox-rpc.exe**. _(refer to the FAQ section to confirm the application is running)_
-    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/ac7f6499-9329-47b9-ac01-949b6aa813e8" width="100" height="25"/>
+   <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/ac7f6499-9329-47b9-ac01-949b6aa813e8" width="100" height="25"/>
 
 # Running application locally
 
@@ -70,7 +77,6 @@ Much more effort needed however.
 
 - The `apiKey` is a guild api key from [Bloxlink](https://blox.link) you will have to go to their website and get one.
 - The `clientId` is my Discord Application ID, you don't need to change it unless you want to.
-
 
 Run the program using `electron ./main.js`. Make sure you are in the correct path.
 
