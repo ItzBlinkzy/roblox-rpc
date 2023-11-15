@@ -72,7 +72,9 @@ const updateNotification = ({ data }) => {
 const removeElement = async ({data}) => {
   console.log(`Removing element. id: ${data.id}`)
   const element = document.getElementById(data.id)
-  element.remove()
+  if (element) {
+    element.remove()
+  }
 }
 
 
@@ -205,6 +207,12 @@ const messageType = {
 
 document.addEventListener("DOMContentLoaded", () => {
   const gameImg = document.getElementById("game-img")
+  const showProfileCheckbox = document.getElementById("profile-checkbox")
+
+  showProfileCheckbox.addEventListener("change", () => {
+    sendToMain("show-profile", showProfileCheckbox.checked)
+  })
+
   gameImg.style.display = "none"
   
   window.electronAPI.updateData((event, data) => {

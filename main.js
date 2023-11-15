@@ -13,6 +13,7 @@ const {readLocalData, writeLocalData} = require("./utils/localData");
 const sendDataQueue = [];
 const COOKIE_BOT_DEBOUNCE_TIME = 800;
 
+let shouldHideProfile = false;
 let isPlaying = false;
 let lastId;
 let mainWindow;
@@ -104,7 +105,7 @@ async function initRobloxPresence(cookie) {
   
           else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
               console.log(`User in ${placeId}`)
-              const placeData = await setPresence(client, placeId)
+              const placeData = await setPresence(client, placeId, shouldHideProfile)
                   .catch(err => console.error(err))
               console.log("Updated presence")
               lastId = placeId
@@ -218,6 +219,17 @@ const debouncedBotCookieHandler = debounce(async (event, data) => {
   return false
 }, COOKIE_BOT_DEBOUNCE_TIME)
 
+const handleShowProfile = async (event, checkedVal) => {
+  shouldHideProfile = checkedVal
+  
+  // Clear activity and setActivity with the lastId if playing.
+  if (isPlaying) {
+    client.clearActivity()
+    await setPresence(client, lastId, shouldHideProfile)
+  }
+  console.log("Should hide profile?: ", {shouldHideProfile})
+}
+
 // App ready event handler
 app.whenReady().then(async () => {
     console.log("-".repeat(30));
@@ -252,7 +264,6 @@ app.whenReady().then(async () => {
         }
         else {
           console.log("Trying to render profile data and roblox presence.")
-          // initRobloxPresence(localCookie)
           const isValidCookie = await initRobloxPresence(localCookie) 
           if (isValidCookie) {
             await renderProfileData() // bloxlink and discord data on screen
@@ -267,8 +278,13 @@ app.whenReady().then(async () => {
         ipcMain.on("bot-cookie", async (event, data) => {
           debouncedBotCookieHandler(event, data)
         });
+
+        ipcMain.on("show-profile", async (event, data) => {
+          handleShowProfile(event, data)
+        })
       }
       catch (err) {
+        console.error(err)
         await sendDataToRenderer("notification", { type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application. Contact @bigblinkzy if this persists." })
         await sendDataToRenderer("printError", err)
         await sendDataToRenderer("removeElement", {id: "rpc-loading"})
