@@ -284,6 +284,29 @@ textarea:focus {
   color: #666666;
 }
 
+/* Style for the modal container */
+.modal {
+  display: none; /* Hide the modal by default */
+  position: fixed;
+  top: 10px; /* Adjust top position as needed */
+  right: 10px; /* Adjust right position as needed */
+}
+
+/* Style for the modal content */
+.modal-content {
+  background-color: #fefefe;
+  padding: 10px;
+  border: 1px solid #888;
+  width: 200px; /* Adjust width as needed */
+}
+
+/* Style for the save and close buttons */
+#saveBtn,
+#closeModalBtn {
+  display: block;
+  margin-top: 10px;
+}
+
 .show-profile-container {
   display: flex;
   flex-direction: column;

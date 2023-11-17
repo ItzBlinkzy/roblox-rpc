@@ -18,7 +18,23 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1><span id="title">ROBLOX RPC</span></h1>
+    <div>
+      <h1><span id="title">ROBLOX RPC</span></h1>
+      <!-- Button to open the modal -->
+      <button id="openModalBtn">Open Profile Settings</button>
+    </div>
+
+    <!-- The modal container -->
+    <div id="profileModal" class="modal">
+      <div class="modal-content">
+        <span id="hide-profile-checkbox">Hide my profile from display.</span>
+        <input type="checkbox" id="profile-checkbox" />
+        <span id="hide-profile-text">Restart is required for changes.</span>
+        <button id="saveBtn">Save</button>
+        <button id="closeModalBtn">Close</button>
+      </div>
+    </div>
+
     <div id="version-number">vX.X.X</div>
     <div id="notif-container"></div>
     <div id="wrapper">

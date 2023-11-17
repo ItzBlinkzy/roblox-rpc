@@ -206,6 +206,14 @@ const messageType = {
 
 
 document.addEventListener("DOMContentLoaded", () => {
+  function openModal() {
+    modal.style.display = 'block';
+  }
+  
+  // Function to close the modal
+  function closeModal() {
+    modal.style.display = 'none';
+  }
   const gameImg = document.getElementById("game-img")
   const showProfileCheckbox = document.getElementById("profile-checkbox")
 
@@ -214,6 +222,9 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   gameImg.style.display = "none"
+  const modal = document.getElementById('profileModal');
+  const openModalBtn = document.getElementById('openModalBtn');
+  const closeModalBtn = document.getElementById('closeModalBtn');
   
   window.electronAPI.updateData((event, data) => {
     console.log(data.label)
@@ -223,6 +234,15 @@ document.addEventListener("DOMContentLoaded", () => {
     else {
       const funcToRun = messageType[data.label]
       funcToRun(data)
+    }
+  });
+  openModalBtn.addEventListener('click', openModal);
+  closeModalBtn.addEventListener('click', closeModal);
+
+  // Close the modal if the user clicks outside of it
+  window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
     }
   });
 })
