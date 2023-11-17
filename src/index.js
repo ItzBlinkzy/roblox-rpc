@@ -206,25 +206,43 @@ const messageType = {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  function openModal() {
-    modal.style.display = 'block';
-  }
-  
-  // Function to close the modal
-  function closeModal() {
-    modal.style.display = 'none';
-  }
   const gameImg = document.getElementById("game-img")
   const showProfileCheckbox = document.getElementById("profile-checkbox")
 
-  showProfileCheckbox.addEventListener("change", () => {
-    sendToMain("show-profile", showProfileCheckbox.checked)
-  })
+  // showProfileCheckbox.addEventListener("change", () => {
+  //   sendToMain("show-profile", showProfileCheckbox.checked)
+  // })
 
   gameImg.style.display = "none"
-  const modal = document.getElementById('profileModal');
-  const openModalBtn = document.getElementById('openModalBtn');
-  const closeModalBtn = document.getElementById('closeModalBtn');
+
+  const modal = document.getElementById('settings-container');
+  const openSettingsBtn = document.getElementById('open-settings-btn');
+  const closeSettingsBtn = document.getElementById('close-settings-btn');
+
+  const openModal = () => {
+    modal.style.display = "block"
+    openSettingsBtn.setAttribute("disabled", true);
+    openSettingsBtn.classList.add("disabled-btn")
+  }
+
+  const closeModal = () => {
+    // save logic here e.g send to main
+
+    modal.style.display = "none"
+    console.log("CLOSING MODAL")
+    openSettingsBtn.removeAttribute("disabled");
+    openSettingsBtn.classList.remove("disabled-btn")
+  }
+
+  // Open modal
+  openSettingsBtn.addEventListener('click', () => {
+    openModal()
+  });
+  // Close modal
+  closeSettingsBtn.addEventListener("click", () => {
+    closeModal()
+  })
+
   
   window.electronAPI.updateData((event, data) => {
     console.log(data.label)
@@ -234,15 +252,6 @@ document.addEventListener("DOMContentLoaded", () => {
     else {
       const funcToRun = messageType[data.label]
       funcToRun(data)
-    }
-  });
-  openModalBtn.addEventListener('click', openModal);
-  closeModalBtn.addEventListener('click', closeModal);
-
-  // Close the modal if the user clicks outside of it
-  window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      closeModal();
     }
   });
 })

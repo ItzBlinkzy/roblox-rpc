@@ -38,6 +38,7 @@ img {
 }
 button {
   outline: none;
+  all: unset;
 }
 
 /* --------------------- */
@@ -127,6 +128,8 @@ textarea:focus {
 
 #container {
   display: flex;
+  height: 100%;
+  width: 100%;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 5px; /* Add rounded corners to the container */
@@ -238,6 +241,9 @@ textarea:focus {
   flex-direction: column;
   padding: 0.8em;
 }
+input[type="checkbox"] {
+  margin: 0; /* Reset default margin */
+}
 
 #cookie-container {
   display: flex;
@@ -274,7 +280,7 @@ textarea:focus {
 }
 
 #cookie-btn:hover {
-  background-color: #005a9e; /* Example hover color */
+  background-color: rgb(201, 189, 33); /* Example hover color */
 }
 
 #cookie-btn:disabled {
@@ -284,41 +290,104 @@ textarea:focus {
   color: #666666;
 }
 
-/* Style for the modal container */
-.modal {
-  display: none; /* Hide the modal by default */
-  position: fixed;
-  top: 10px; /* Adjust top position as needed */
-  right: 10px; /* Adjust right position as needed */
-}
-
-/* Style for the modal content */
-.modal-content {
-  background-color: #fefefe;
-  padding: 10px;
-  border: 1px solid #888;
-  width: 200px; /* Adjust width as needed */
-}
-
 /* Style for the save and close buttons */
-#saveBtn,
-#closeModalBtn {
+#save-btn,
+#close-modal-btn {
   display: block;
   margin-top: 10px;
 }
-
-.show-profile-container {
-  display: flex;
-  flex-direction: column;
-  padding: 0.8em;
-  font-size: 18px;
+#save-btn {
+  border: 1px #080707 solid;
+  color: black;
+  text-align: center;
+  width: 80px;
+  background-color: #78adf7;
+  padding: 0.25em;
+  border-radius: 2.5%;
+  cursor: pointer;
+}
+#save-btn:hover,
+#open-settings-btn:hover {
+  background-color: #0078d4;
+  cursor: pointer;
+  outline-width: 2px;
 }
 
+#close-settings-btn {
+  cursor: pointer;
+}
+
+#open-settings-container {
+  display: flex;
+  padding: 0.5em;
+  justify-content: flex-end;
+}
+
+#open-settings-btn {
+  background-color: #78adf7;
+  font-weight: 200;
+  padding: 0.5rem;
+  color: #333;
+  border-radius: 0.125rem;
+  outline-color: #6e7b8d;
+  outline-width: 1px;
+  outline-style: solid;
+  font-weight: 600;
+}
+
+#open-settings-btn:disabled,
+#open-settings-btn.disabled-btn:hover {
+  background-color: #a8a8a8;
+  cursor: not-allowed;
+  outline-width: 1px; /* Adjust as needed */
+}
+
+/* Centering and sizing the container */
+#settings-container {
+  position: absolute;
+  padding: 0.75em;
+  border: 1px solid #333;
+  font-size: 18px;
+  inset: 0;
+  display: none;
+  background-color: #cccccc;
+  left: 50%;
+  top: 50%;
+  width: 65%;
+  transform: translate(-50%, -50%);
+}
+#restart-text {
+  font-size: 12px;
+}
+
+#list-item {
+  height: 50%;
+}
+
+/* Header styling */
+#settings-header {
+  display: flex;
+  border-bottom: 2px solid black; /* Slate gray border color */
+  height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+}
+#close-settings-btn,
+#close-svg {
+  height: 20px;
+  width: 20px;
+}
+#hide-profile-container {
+  font-size: 16px;
+  padding: 1em;
+}
 #profile-checkbox {
   height: 1.2em;
   width: 1.2em;
 }
-#hide-profile-text {
-  font-size: 13px;
-  font-style: italic;
+
+.disabled-btn {
+  cursor: not-allowed;
+  background-color: #a8a8a8;
+  color: #666666;
 }
