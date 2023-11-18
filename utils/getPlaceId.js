@@ -15,7 +15,7 @@ async function getPlaceId(userId) {
     }
   catch (err) {
     console.error(err)
-    return -1
+    return -2
   }
 }
 
