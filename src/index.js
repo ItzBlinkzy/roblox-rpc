@@ -16,7 +16,7 @@ const handleBotCookieInput = () => {
   const input = (inputEl.value).trim();
     
     if (input === "") {
-      updateNotification({data: {message: "Enter the entire cookie before sending.", type: "warning"}})
+      updateNotification({data: {message: "Enter a cookie before sending.", type: "warning"}})
         return;
     }
 
@@ -29,7 +29,7 @@ const handleBotCookieInput = () => {
 }
 
 const updateNotification = ({ data }) => {
-  // can be "type": "error" | "type": "warning" | "type": "loading"
+  // can be "type": "error" | "type": "warning" | "type": "loading" | "type": "success"
   const typeColors = {
     "error": "#ff9494",
     "warning": "#ffff31",
@@ -72,7 +72,9 @@ const updateNotification = ({ data }) => {
 const removeElement = async ({data}) => {
   console.log(`Removing element. id: ${data.id}`)
   const element = document.getElementById(data.id)
-  element.remove()
+  if (element) {
+    element.remove()
+  }
 }
 
 
@@ -103,12 +105,14 @@ const updateGameDetails = ({data}) => {
   gameImg.style.display = "block"
   gameTitle.textContent = data.gameName
 
-  if (!intervalId) {
-    intervalId = setInterval(() => {
-      const ms = Date.now() - data.currentTime
-      elapsedTime.textContent = msToMinutesAndSeconds(ms)
-    }, 1000)
+  if (intervalId) {
+    clearInterval(intervalId);
   }
+  
+  intervalId = setInterval(() => {
+    const ms = Date.now() - data.currentTime;
+    elapsedTime.textContent = msToMinutesAndSeconds(ms);
+  }, 1000);
 }
 
 
@@ -188,7 +192,11 @@ const enableButton = async ({retryCount}) => {
   // If the cookie button is found, enable it
   cookieBtn.disabled = false;
 };
-
+const loadSettings = ({data}) => {
+  const {shouldHideProfile} = data
+  const showProfileCheckbox = document.getElementById("profile-checkbox")
+  showProfileCheckbox.checked = shouldHideProfile
+}
 
 const messageType = {
   notification: updateNotification,
@@ -199,13 +207,52 @@ const messageType = {
   printError: printError,
   removeElement: removeElement,
   createInput: createInput,
-  enableButton: enableButton
+  enableButton: enableButton,
+  loadSettings: loadSettings
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
   const gameImg = document.getElementById("game-img")
+  const showProfileCheckbox = document.getElementById("profile-checkbox")
+  const cookieCheckbox = document.getElementById("cookie-checkbox")
+
   gameImg.style.display = "none"
+
+  const modal = document.getElementById('settings-container');
+  const openSettingsBtn = document.getElementById('open-settings-btn');
+  const closeSettingsBtn = document.getElementById('close-settings-btn');
+  const saveBtn = document.getElementById("save-btn")
+  const openModal = () => {
+    modal.style.display = "block"
+    openSettingsBtn.setAttribute("disabled", true);
+    openSettingsBtn.classList.add("disabled-btn")
+  }
+
+  const closeModal = () => {
+
+    modal.style.display = "none"
+    openSettingsBtn.removeAttribute("disabled");
+    openSettingsBtn.classList.remove("disabled-btn")
+  }
+
+  // Open modal
+  openSettingsBtn.addEventListener('click', () => {
+    openModal()
+  });
+  // Close modal
+  closeSettingsBtn.addEventListener("click", () => {
+    closeModal()
+  })
+
+  // Save locally
+  saveBtn.addEventListener("click", () => {
+    const shouldResetCookie = cookieCheckbox.checked
+    sendToMain("save-data", {checked: showProfileCheckbox.checked, shouldResetCookie})
+    closeModal()
+  })
+
   
   window.electronAPI.updateData((event, data) => {
     console.log(data.label)

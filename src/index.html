@@ -18,7 +18,66 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1><span id="title">ROBLOX RPC</span></h1>
+    <div id="open-settings-container">
+      <button id="open-settings-btn">Open Settings</button>
+    </div>
+
+    <div>
+      <h1><span id="title">ROBLOX RPC</span></h1>
+    </div>
+
+    <div id="settings-container">
+      <div>
+        <div id="settings-header">
+          <div>Settings</div>
+          <button id="close-settings-btn">
+            <svg
+              viewBox="0 0 12 12"
+              version="1.1"
+              id="close-svg"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="1"
+                y1="11"
+                x2="11"
+                y2="1"
+                stroke="black"
+                stroke-width="2"
+              />
+              <line
+                x1="1"
+                y1="1"
+                x2="11"
+                y2="11"
+                stroke="black"
+                stroke-width="2"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="list-item">
+        <div id="hide-profile-container">
+          <span id="hide-profile-text"
+            >Hide my ROBLOX profile from display.</span
+          >
+          <div class="checkbox-container">
+            <input type="checkbox" id="profile-checkbox" />
+          </div>
+        </div>
+        <div id="bot-cookie-container">
+          <span>Reset bot cookie</span>
+          <div class="checkbox-container">
+            <input type="checkbox" id="cookie-checkbox" />
+          </div>
+        </div>
+      </div>
+      <div id="save-settings">
+        <button id="save-btn">Save</button>
+      </div>
+    </div>
+
     <div id="version-number">vX.X.X</div>
     <div id="notif-container"></div>
     <div id="wrapper">

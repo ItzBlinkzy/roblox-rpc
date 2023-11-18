@@ -3,7 +3,10 @@ html {
   box-sizing: border-box;
   font-size: 16px;
   min-height: 100vh;
-  background-color: #ffdefc;
+  background-color: #f3ece4;
+}
+* {
+  color: #393c3f;
 }
 
 *,
@@ -38,6 +41,7 @@ img {
 }
 button {
   outline: none;
+  all: unset;
 }
 
 /* --------------------- */
@@ -127,6 +131,8 @@ textarea:focus {
 
 #container {
   display: flex;
+  height: 100%;
+  width: 100%;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 5px; /* Add rounded corners to the container */
@@ -140,7 +146,7 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #ffdefc;
+  background-color: #f3ece4;
   width: 100%;
   padding: 0.8em;
 }
@@ -238,6 +244,9 @@ textarea:focus {
   flex-direction: column;
   padding: 0.8em;
 }
+input[type="checkbox"] {
+  margin: 0; /* Reset default margin */
+}
 
 #cookie-container {
   display: flex;
@@ -267,19 +276,126 @@ textarea:focus {
 #cookie-btn {
   padding: 0.5em 1em;
   font-size: 1rem;
-  background-color: #0078d4; /* Example button color */
-  color: white;
+  background-color: #78adf7; /* Example button color */
+  color: #333;
   border: none;
   cursor: pointer;
+  outline-color: #6e7b8d;
+  outline-width: 1px;
+  outline-style: solid;
+  border-radius: 1%;
 }
 
 #cookie-btn:hover {
-  background-color: #005a9e; /* Example hover color */
+  background-color: #0078d4; /* Example hover color */
 }
 
 #cookie-btn:disabled {
   cursor: not-allowed;
   border: 1px solid #999999;
   background-color: #cccccc;
+  color: #666666;
+}
+
+/* Style for the save and close buttons */
+#save-btn,
+#close-modal-btn {
+  display: block;
+  margin-top: 10px;
+}
+#save-btn {
+  border: 1px #080707 solid;
+  color: black;
+  text-align: center;
+  width: 80px;
+  background-color: #78adf7;
+  padding: 0.25em;
+  border-radius: 2.5%;
+  cursor: pointer;
+}
+#save-btn:hover,
+#open-settings-btn:hover {
+  background-color: #0078d4;
+  cursor: pointer;
+  outline-width: 2px;
+}
+
+#close-settings-btn {
+  cursor: pointer;
+}
+
+#open-settings-container {
+  display: flex;
+  padding: 0.5em;
+  justify-content: flex-end;
+}
+
+#open-settings-btn {
+  background-color: #78adf7;
+  font-weight: 200;
+  padding: 0.5rem;
+  color: #333;
+  border-radius: 0.125rem;
+  outline-color: #6e7b8d;
+  outline-width: 1px;
+  outline-style: solid;
+}
+
+#open-settings-btn:disabled,
+#open-settings-btn.disabled-btn:hover {
+  background-color: #a8a8a8;
+  cursor: not-allowed;
+  outline-width: 1px; /* Adjust as needed */
+}
+
+/* Centering and sizing the container */
+#settings-container {
+  position: absolute;
+  padding: 0.75em;
+  border: 1px solid #333;
+  font-size: 18px;
+  inset: 0;
+  display: none;
+  background-color: #ffcfde;
+  left: 50%;
+  top: 50%;
+  width: 65%;
+  transform: translate(-50%, -50%);
+}
+#restart-text {
+  font-size: 12px;
+}
+
+#list-item {
+  height: 50%;
+}
+
+/* Header styling */
+#settings-header {
+  display: flex;
+  border-bottom: 2px solid black; /* Slate gray border color */
+  height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+}
+#close-settings-btn,
+#close-svg {
+  height: 20px;
+  width: 20px;
+}
+#hide-profile-container,
+#bot-cookie-container {
+  font-size: 16px;
+  padding: 0.25em;
+}
+#profile-checkbox,
+#cookie-checkbox {
+  height: 1.2em;
+  width: 1.2em;
+}
+
+.disabled-btn {
+  cursor: not-allowed;
+  background-color: #a8a8a8;
   color: #666666;
 }
