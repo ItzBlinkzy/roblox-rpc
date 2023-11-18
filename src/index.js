@@ -16,7 +16,7 @@ const handleBotCookieInput = () => {
   const input = (inputEl.value).trim();
     
     if (input === "") {
-      updateNotification({data: {message: "Enter the entire cookie before sending.", type: "warning"}})
+      updateNotification({data: {message: "Enter a cookie before sending.", type: "warning"}})
         return;
     }
 
@@ -29,7 +29,7 @@ const handleBotCookieInput = () => {
 }
 
 const updateNotification = ({ data }) => {
-  // can be "type": "error" | "type": "warning" | "type": "loading"
+  // can be "type": "error" | "type": "warning" | "type": "loading" | "type": "success"
   const typeColors = {
     "error": "#ff9494",
     "warning": "#ffff31",
@@ -190,7 +190,11 @@ const enableButton = async ({retryCount}) => {
   // If the cookie button is found, enable it
   cookieBtn.disabled = false;
 };
-
+const loadSettings = ({data}) => {
+  const {shouldHideProfile} = data
+  const showProfileCheckbox = document.getElementById("profile-checkbox")
+  showProfileCheckbox.checked = shouldHideProfile
+}
 
 const messageType = {
   notification: updateNotification,
@@ -201,24 +205,22 @@ const messageType = {
   printError: printError,
   removeElement: removeElement,
   createInput: createInput,
-  enableButton: enableButton
+  enableButton: enableButton,
+  loadSettings: loadSettings
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
   const gameImg = document.getElementById("game-img")
   const showProfileCheckbox = document.getElementById("profile-checkbox")
 
-  // showProfileCheckbox.addEventListener("change", () => {
-  //   sendToMain("show-profile", showProfileCheckbox.checked)
-  // })
-
   gameImg.style.display = "none"
 
   const modal = document.getElementById('settings-container');
   const openSettingsBtn = document.getElementById('open-settings-btn');
   const closeSettingsBtn = document.getElementById('close-settings-btn');
-
+  const saveBtn = document.getElementById("save-btn")
   const openModal = () => {
     modal.style.display = "block"
     openSettingsBtn.setAttribute("disabled", true);
@@ -226,10 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const closeModal = () => {
-    // save logic here e.g send to main
 
     modal.style.display = "none"
-    console.log("CLOSING MODAL")
     openSettingsBtn.removeAttribute("disabled");
     openSettingsBtn.classList.remove("disabled-btn")
   }
@@ -240,6 +240,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   // Close modal
   closeSettingsBtn.addEventListener("click", () => {
+    closeModal()
+  })
+
+  // Save locally
+  saveBtn.addEventListener("click", () => {
+    sendToMain("save-data", showProfileCheckbox.checked)
     closeModal()
   })
 

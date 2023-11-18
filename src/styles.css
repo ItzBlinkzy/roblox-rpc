@@ -3,7 +3,10 @@ html {
   box-sizing: border-box;
   font-size: 16px;
   min-height: 100vh;
-  background-color: #ffdefc;
+  background-color: #eddfce;
+}
+* {
+  color: #3d2f2f;
 }
 
 *,
@@ -143,7 +146,7 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #ffdefc;
+  background-color: #eddfce;
   width: 100%;
   padding: 0.8em;
 }
@@ -273,14 +276,18 @@ input[type="checkbox"] {
 #cookie-btn {
   padding: 0.5em 1em;
   font-size: 1rem;
-  background-color: #0078d4; /* Example button color */
-  color: white;
+  background-color: #78adf7; /* Example button color */
+  color: #333;
   border: none;
   cursor: pointer;
+  outline-color: #6e7b8d;
+  outline-width: 1px;
+  outline-style: solid;
+  border-radius: 1%;
 }
 
 #cookie-btn:hover {
-  background-color: rgb(201, 189, 33); /* Example hover color */
+  background-color: #0078d4; /* Example hover color */
 }
 
 #cookie-btn:disabled {
@@ -332,7 +339,6 @@ input[type="checkbox"] {
   outline-color: #6e7b8d;
   outline-width: 1px;
   outline-style: solid;
-  font-weight: 600;
 }
 
 #open-settings-btn:disabled,
@@ -350,7 +356,7 @@ input[type="checkbox"] {
   font-size: 18px;
   inset: 0;
   display: none;
-  background-color: #cccccc;
+  background-color: #afafaf;
   left: 50%;
   top: 50%;
   width: 65%;

@@ -24,8 +24,6 @@ async function findRobloxInfo(discordId) {
           return false
       }
       const data = await response.json()
-      console.log("Bloxlink data received: ", data)
-  
       if (!data) {
         return false
       }

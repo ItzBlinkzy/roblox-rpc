@@ -175,15 +175,6 @@ async function createWindow() {
     });
 }
 
-function getLocalCookie() {
-  const data = readLocalData()
-  if (!data) {
-    return false
-  }
-  return data.cookie
-}
-
-
 
 function debounce(func, delay) {
   let timer;
@@ -219,16 +210,6 @@ const debouncedBotCookieHandler = debounce(async (event, data) => {
   return false
 }, COOKIE_BOT_DEBOUNCE_TIME)
 
-const handleShowProfile = async (event, checkedVal) => {
-  shouldHideProfile = checkedVal
-  
-  // Clear activity and setActivity with the lastId if playing.
-  if (isPlaying) {
-    client.clearActivity()
-    await setPresence(client, lastId, shouldHideProfile)
-  }
-  console.log("Should hide profile?: ", {shouldHideProfile})
-}
 
 // App ready event handler
 app.whenReady().then(async () => {
@@ -257,14 +238,18 @@ app.whenReady().then(async () => {
         await sendDataToRenderer("removeElement", {id: "rpc-loading"})
         await sendDataToRenderer("enableButton", {})
         
-        const localCookie = getLocalCookie()
-        
-        if (!localCookie) {
+
+        const localData = readLocalData() 
+        const cookie = localData?.cookie || false
+        shouldHideProfile = localData?.shouldHideProfile || false;
+        await sendDataToRenderer("loadSettings", {shouldHideProfile})
+        console.log({cookie: cookie.length, shouldHideProfile})
+        if (!cookie) {
           await sendDataToRenderer("createInput")
         }
         else {
           console.log("Trying to render profile data and roblox presence.")
-          const isValidCookie = await initRobloxPresence(localCookie) 
+          const isValidCookie = await initRobloxPresence(cookie) 
           if (isValidCookie) {
             await renderProfileData() // bloxlink and discord data on screen
           }
@@ -282,10 +267,22 @@ app.whenReady().then(async () => {
         ipcMain.on("show-profile", async (event, data) => {
           handleShowProfile(event, data)
         })
+
+        ipcMain.on("save-data", async (event, data) => {
+          console.log("Saving data")
+          try {
+            writeLocalData({shouldHideProfile: data})
+            await sendDataToRenderer("notification", {type: "success", message: "Successfully saved settings, restart to apply changes."})
+          }
+          catch (err) {
+            console.error(err)
+            await sendDataToRenderer("notification", { type: "error", message: "Could not save settings, please try again, if it persists contact @bigblinkzy." })
+          }
+        })
       }
       catch (err) {
         console.error(err)
-        await sendDataToRenderer("notification", { type: "error", message: "Could not connect to client. Please ensure Discord is open before running this application. Contact @bigblinkzy if this persists." })
+        await sendDataToRenderer("notification", { type: "error", message: "Could not connect to client. Please try restarting discord before running this application. Contact @bigblinkzy if this persists." })
         await sendDataToRenderer("printError", err)
         await sendDataToRenderer("removeElement", {id: "rpc-loading"})
       }
