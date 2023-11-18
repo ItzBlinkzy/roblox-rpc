@@ -111,7 +111,6 @@ const updateGameDetails = ({data}) => {
   
   intervalId = setInterval(() => {
     const ms = Date.now() - data.currentTime;
-    console.log("MS FOR GAME USER HAS BEEN IN ", msToMinutesAndSeconds(ms));
     elapsedTime.textContent = msToMinutesAndSeconds(ms);
   }, 1000);
 }
