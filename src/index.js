@@ -108,6 +108,7 @@ const updateGameDetails = ({data}) => {
   if (!intervalId) {
     intervalId = setInterval(() => {
       const ms = Date.now() - data.currentTime
+      console.log("MS FOR GAME USER HAS BEEN IN ", msToMinutesAndSeconds(ms))
       elapsedTime.textContent = msToMinutesAndSeconds(ms)
     }, 1000)
   }
@@ -214,6 +215,7 @@ const messageType = {
 document.addEventListener("DOMContentLoaded", () => {
   const gameImg = document.getElementById("game-img")
   const showProfileCheckbox = document.getElementById("profile-checkbox")
+  const cookieCheckbox = document.getElementById("cookie-checkbox")
 
   gameImg.style.display = "none"
 
@@ -245,7 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Save locally
   saveBtn.addEventListener("click", () => {
-    sendToMain("save-data", showProfileCheckbox.checked)
+    const shouldResetCookie = cookieCheckbox.checked
+    sendToMain("save-data", {checked: showProfileCheckbox.checked, shouldResetCookie})
     closeModal()
   })
 

@@ -269,9 +269,17 @@ app.whenReady().then(async () => {
         })
 
         ipcMain.on("save-data", async (event, data) => {
-          console.log("Saving data")
+          const hideProfileChecked = data.checked
+          const shouldResetCookie = data.shouldResetCookie
+
           try {
-            writeLocalData({shouldHideProfile: data})
+            let dataToWrite = {shouldHideProfile: hideProfileChecked}
+
+            if (shouldResetCookie) {
+              dataToWrite = {...dataToWrite, cookie: ""}
+            }
+
+            writeLocalData(dataToWrite)
             await sendDataToRenderer("notification", {type: "success", message: "Successfully saved settings, restart to apply changes."})
           }
           catch (err) {
