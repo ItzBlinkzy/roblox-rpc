@@ -105,13 +105,15 @@ const updateGameDetails = ({data}) => {
   gameImg.style.display = "block"
   gameTitle.textContent = data.gameName
 
-  if (!intervalId) {
-    intervalId = setInterval(() => {
-      const ms = Date.now() - data.currentTime
-      console.log("MS FOR GAME USER HAS BEEN IN ", msToMinutesAndSeconds(ms))
-      elapsedTime.textContent = msToMinutesAndSeconds(ms)
-    }, 1000)
+  if (intervalId) {
+    clearInterval(intervalId);
   }
+  
+  intervalId = setInterval(() => {
+    const ms = Date.now() - data.currentTime;
+    console.log("MS FOR GAME USER HAS BEEN IN ", msToMinutesAndSeconds(ms));
+    elapsedTime.textContent = msToMinutesAndSeconds(ms);
+  }, 1000);
 }
 
 
