@@ -284,6 +284,7 @@ app.whenReady().then(async () => {
           }
           catch (err) {
             console.error(err)
+            await sendDataToRenderer("printError", err)
             await sendDataToRenderer("notification", { type: "error", message: "Could not save settings, please try again, if it persists contact @bigblinkzy." })
           }
         })
