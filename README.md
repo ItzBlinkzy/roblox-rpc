@@ -39,7 +39,7 @@
    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/71ccb62c-3f49-476d-be9c-c82fa49c3469" width="800" height="310"/>
 6. Right click and **copy the .ROBLOSECURITY value** including the warning and paste it into ROBLOX RPC's bot cookie input.
 
-<img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/c16594ef-9ba1-4c10-b4e3-9c7d5fe34363" width="300" height="225" sty/>
+<img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/83a6df6e-9014-4aa2-b365-7c58ebffd442" width="320" height="240" sty/>
 
 7. Finally close the incognito window **(DONT CLICK LOG OUT)**
 
@@ -49,11 +49,11 @@
 2. Run **roblox-rpc.exe**. _(refer to the FAQ section to confirm the application is running)_
    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/ac7f6499-9329-47b9-ac01-949b6aa813e8" width="100" height="25"/>
 
-# Running application locally
+---
+### Running application locally 
 
-**_If you do not want to download the exe file, you can run this application locally._**
+#### **_Only do this if you dont want to run the EXE file_**
 Much more effort needed however.
-
 - **Prerequisites**
   - Latest version of NodeJS installed.
   - A code editor, e.g Visual Studio Code.
@@ -88,8 +88,8 @@ _If you want to create your own exe, use `npm run make` and **electron-forge** s
 
   - A window should pop up and load your ROBLOX and Discord account name and id's showing you which accounts you are verified with.
 
-  <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/6ad5a69b-1854-4619-b845-b19c195fc3d1"
-    alt="installation" width="500" height="300"/>
+  <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/aa124731-a567-4a4e-85e4-886b337d92fa"
+    alt="installation" width="640" height="480"/>
 
 - **_Do I need the window open for the RPC to work on Discord?_**
 
