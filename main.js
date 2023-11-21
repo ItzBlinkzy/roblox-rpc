@@ -66,9 +66,12 @@ const rpcReadyPromise = new Promise(async (resolve, reject) => {
       const ctxMenu = await initCtxMenu()
       tray.setContextMenu(ctxMenu)
 
-      tray.on("click", () => {
+      tray.on("right-click", () => {
+        console.log("Tray button right clicked.")
+        console.log({trayType: typeof tray})
         tray.popUpContextMenu()
       })
+
 
       console.log("-".repeat(30));
       console.log("Discord RPC Ready");
@@ -97,23 +100,32 @@ async function initRobloxPresence(cookie) {
 
       setInterval(async () => {
           const placeId = await getPlaceId(robloxId)
+          
+          const notInGame = placeId === -1
+          const hasSwitchedGames = lastId !== placeId
           console.log({placeId})
-          const isInDifferentGame = (lastId !== placeId)
-  
-          if (placeId === -1) {
-              console.log("Not in a game, clearing presence.")
-              await client.clearActivity()
-              isPlaying = false
-  
-              // they were previously in a game
-              if (lastId) {
-                  console.log("PREVIOUSLY IN GAME, CLEAR THE BROWSER")
-                  lastId = null
-                  await sendDataToRenderer("clearGameDetails")
-              }
+          
+          if (placeId === null) {
+            console.log("Could not check user presence. Trying again. (error)")
+            return
+          } 
+          
+          if (notInGame) {
+            console.log("Presence has not found any game data.")
+            await client.clearActivity()
+            isPlaying = false
+            
+            // they were previously in a game
+            if (lastId) {
+              console.log("Previously in a game, clearing browser.")
+              lastId = null
+              await sendDataToRenderer("clearGameDetails")
+            }
+            return
           }
+          
   
-          else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
+        if (!isPlaying || hasSwitchedGames) {
               console.log(`User in ${placeId}`)
               const placeData = await setPresence(client, placeId, shouldHideProfile)
                   .catch(err => console.error(err))
@@ -228,11 +240,11 @@ const initCtxMenu = () => {
       click: async () => mainWindow.show()
     },
     {
-      label: "Quit",
+      label: "❌ Quit",
       click: async () => {
-        await client.destroy();
-        app.quit();
-      },
+          await tray.destroy()
+          mainWindow.destroy()
+      }
     },
   ];
 
@@ -253,7 +265,7 @@ app.whenReady().then(async () => {
 
     if (!gotTheLock) {
         // "Application already open"
-        app.quit();
+        return app.exit();
     }
 
 
