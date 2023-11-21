@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, BrowserWindow, ipcMain, Tray, Menu } = require("electron")
 const noblox = require("noblox.js");
 const rpc = require("discord-rpc");
 const path = require("path");
@@ -13,13 +13,14 @@ const {readLocalData, writeLocalData} = require("./utils/localData");
 const sendDataQueue = [];
 const COOKIE_BOT_DEBOUNCE_TIME = 800;
 
+let tray = null;
 let shouldHideProfile = false;
 let isPlaying = false;
 let lastId;
 let mainWindow;
 let robloxId;
 
-const iconPath = path.join(__dirname, "./icons/logo.png");
+const iconPath = path.join(__dirname, "./images/logo.png");
 const gotTheLock = app.requestSingleInstanceLock();
 
 const client = new rpc.Client({
@@ -59,7 +60,16 @@ const rpcReadyPromise = new Promise(async (resolve, reject) => {
   // Register an event listener for the "rpc-ready" event
   try {
     console.log("Inside rpc ready promise")
-    client.on("ready", () => {
+    client.on("ready", async () => {
+      tray = new Tray(iconPath)
+      tray.setToolTip("Roblox Discord Rich Presence")
+      const ctxMenu = await initCtxMenu()
+      tray.setContextMenu(ctxMenu)
+
+      tray.on("click", () => {
+        tray.popUpContextMenu()
+      })
+
       console.log("-".repeat(30));
       console.log("Discord RPC Ready");
       console.log("-".repeat(30));
@@ -169,9 +179,10 @@ async function createWindow() {
     });
 
     // Handle window closed event
-    mainWindow.on("closed", () => {
-        mainWindow = null;
-        app.quit();
+    mainWindow.on("close", (event) => {
+      // prevent default close
+      event.preventDefault();
+      mainWindow.hide(); 
     });
 }
 
@@ -209,6 +220,27 @@ const debouncedBotCookieHandler = debounce(async (event, data) => {
   }
   return false
 }, COOKIE_BOT_DEBOUNCE_TIME)
+
+const initCtxMenu = () => {
+  const template = [
+    {
+      label: "Open ROBLOX RPC",
+      click: async () => mainWindow.show()
+    },
+    {
+      label: "Quit",
+      click: async () => {
+        await client.destroy();
+        app.quit();
+      },
+    },
+  ];
+
+  const ctxMenu = Menu.buildFromTemplate(template);
+
+  return ctxMenu;
+};
+
 
 
 // App ready event handler
