@@ -1,6 +1,5 @@
 const noblox = require("noblox.js")
 const rpc = require("discord-rpc")
-const {findRobloxInfo} = require("./findRobloxInfo")
 const {getPlaceIcon} = require("./getPlaceIcon")
 const fetch = require("node-fetch")
 /**
@@ -11,8 +10,7 @@ const fetch = require("node-fetch")
  * @returns {Object}
  */
 
-async function setPresence(client, placeId, shouldHideProfile) {
-    const {robloxUsername, robloxId} = await findRobloxInfo(client.user.id)
+async function setPresence(client, placeId, shouldHideProfile, robloxId, robloxUsername) {
     const response = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
     const data = await response.json()
     const universeId = data.universeId

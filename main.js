@@ -19,6 +19,7 @@ let isPlaying = false;
 let lastId;
 let mainWindow;
 let robloxId;
+let robloxUsername;
 
 const iconPath = path.join(__dirname, "./images/logo.png");
 const gotTheLock = app.requestSingleInstanceLock();
@@ -72,6 +73,10 @@ const rpcReadyPromise = new Promise(async (resolve, reject) => {
         tray.popUpContextMenu()
       })
 
+      tray.on("click", async () => {
+        mainWindow.show()
+      })
+
 
       console.log("-".repeat(30));
       console.log("Discord RPC Ready");
@@ -99,6 +104,12 @@ async function initRobloxPresence(cookie) {
       await noblox.setCookie(cookie)
 
       setInterval(async () => {
+
+          if (!robloxId | !robloxUsername) {
+            console.log("User ROBLOX data has not been retrieved yet.")
+            return
+          }
+
           const placeId = await getPlaceId(robloxId)
           
           const notInGame = placeId === -1
@@ -127,7 +138,7 @@ async function initRobloxPresence(cookie) {
   
         if (!isPlaying || hasSwitchedGames) {
               console.log(`User in ${placeId}`)
-              const placeData = await setPresence(client, placeId, shouldHideProfile)
+              const placeData = await setPresence(client, placeId, shouldHideProfile, robloxId, robloxUsername)
                   .catch(err => console.error(err))
               console.log("Updated presence")
               lastId = placeId
@@ -149,7 +160,7 @@ async function initRobloxPresence(cookie) {
   return true
 }
 
-async function renderProfileData() {
+async function setProfileData() {
   const discordUser = `@${client.user.username}`
   const discordId = client.user.id
   const data = await findRobloxInfo(discordId)
@@ -163,6 +174,8 @@ async function renderProfileData() {
   else {
       console.log("Found Bloxlink details", data)
       robloxId = data.robloxId
+      robloxUsername = data.robloxUsername
+      
       const robloxAvatar = await noblox.getPlayerThumbnail(data.robloxId)
       const userData = { roblox: { user: data.robloxUsername, id: data.robloxId, avatar: robloxAvatar[0].imageUrl }, discord: { user: discordUser, id: discordId } }
       await sendDataToRenderer("userDetails", userData)
@@ -219,7 +232,7 @@ const debouncedBotCookieHandler = debounce(async (event, data) => {
     writeLocalData({cookie: data.cookie})
     await sendDataToRenderer("removeElement", {id: "cookie-container"})
     // Start bloxlink and render discord and roblox info to page.
-    renderProfileData()
+    setProfileData()
     return true
   }
 
@@ -295,7 +308,7 @@ app.whenReady().then(async () => {
           console.log("Trying to render profile data and roblox presence.")
           const isValidCookie = await initRobloxPresence(cookie) 
           if (isValidCookie) {
-            await renderProfileData() // bloxlink and discord data on screen
+            await setProfileData() // bloxlink and discord data on screen
           }
           // previously valid cookie now expired.
           else {
