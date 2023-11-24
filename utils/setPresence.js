@@ -10,7 +10,12 @@ const fetch = require("node-fetch")
  * @returns {Object}
  */
 
-async function setPresence(client, placeId, shouldHideProfile, robloxId, robloxUsername) {
+async function setPresence(client, placeId, shouldHideProfile, robloxId, robloxUsername, retryCount=3) {
+  if (retryCount <= 0) {
+    console.log("Retry count reached, Cancelling.")
+    return 
+  }
+  try {
     const response = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
     const data = await response.json()
     const universeId = data.universeId
@@ -43,5 +48,11 @@ async function setPresence(client, placeId, shouldHideProfile, robloxId, robloxU
     })
 
     return {robloxUsername, robloxId, gameName, gameUrl, iconURL, profileUrl, currentTime}
+  }
+  catch (err) {
+    console.error(err)
+    console.log("Could not set presence, retrying again.")
+    setPresence(client, placeId, shouldHideProfile, robloxId, robloxUsername, retryCount - 1)
+  }
 }
 module.exports.setPresence = setPresence
