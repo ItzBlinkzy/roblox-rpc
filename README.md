@@ -50,10 +50,13 @@
    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/ac7f6499-9329-47b9-ac01-949b6aa813e8" width="100" height="25"/>
 
 ---
-### Running application locally 
+
+### Running application locally
 
 #### **_Only do this if you dont want to run the EXE file_**
+
 Much more effort needed however.
+
 - **Prerequisites**
   - Latest version of NodeJS installed.
   - A code editor, e.g Visual Studio Code.
@@ -88,12 +91,20 @@ _If you want to create your own exe, use `npm run make` and **electron-forge** s
 
   - A window should pop up and load your ROBLOX and Discord account name and id's showing you which accounts you are verified with.
 
-  <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/aa124731-a567-4a4e-85e4-886b337d92fa"
-    alt="installation" width="640" height="480"/>
+  <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/aa124731-a567-4a4e-85e4-886b337d92fa" alt="installation" width="640" height="480"/>
 
 - **_Do I need the window open for the RPC to work on Discord?_**
 
-  - Closing the window will close the application, however you can minimize the window and it will work fine.
+  - No, ROBLOX RPC is able to run in the background when the window is closed.
+
+  - To re-open the window, **left-click** the rpc icon in the tray (bottom right corner of your taskbar).
+
+    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/ada345f2-538e-4399-a9e8-1dacdbe803c4" alt="installation" width="250" height="150"/>
+
+  - To exit, **right-click** the icon to view the context menu and choose the "❌ Quit" button.
+
+    <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/b072bd5c-7821-45ca-b6a5-29e9dc94e60f" alt="installation" width="180" height="90"/>
+
 
 - **_Can I use this on MacOS?_**
 
