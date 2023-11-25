@@ -1,6 +1,5 @@
 const noblox = require("noblox.js")
 const rpc = require("discord-rpc")
-const {findRobloxInfo} = require("./findRobloxInfo")
 const {getPlaceIcon} = require("./getPlaceIcon")
 const fetch = require("node-fetch")
 /**
@@ -11,8 +10,12 @@ const fetch = require("node-fetch")
  * @returns {Object}
  */
 
-async function setPresence(client, placeId, shouldHideProfile) {
-    const {robloxUsername, robloxId} = await findRobloxInfo(client.user.id)
+async function setPresence(client, placeId, shouldHideProfile, robloxId, robloxUsername, retryCount=3) {
+  if (retryCount <= 0) {
+    console.log("Retry count reached, Cancelling.")
+    return 
+  }
+  try {
     const response = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
     const data = await response.json()
     const universeId = data.universeId
@@ -45,5 +48,11 @@ async function setPresence(client, placeId, shouldHideProfile) {
     })
 
     return {robloxUsername, robloxId, gameName, gameUrl, iconURL, profileUrl, currentTime}
+  }
+  catch (err) {
+    console.error(err)
+    console.log("Could not set presence, retrying again.")
+    setPresence(client, placeId, shouldHideProfile, robloxId, robloxUsername, retryCount - 1)
+  }
 }
 module.exports.setPresence = setPresence

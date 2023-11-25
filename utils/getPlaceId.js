@@ -3,7 +3,7 @@ const noblox = require("noblox.js")
 /**
  * 
  * @param {Number} userId 
- * @returns {Promise<Number>}
+ * @returns {Promise<Number | null>}
  */
 
 async function getPlaceId(userId) {
@@ -15,7 +15,7 @@ async function getPlaceId(userId) {
     }
   catch (err) {
     console.error(err)
-    return -2
+    return null
   }
 }
 

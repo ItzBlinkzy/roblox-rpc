@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, BrowserWindow, ipcMain, Tray, Menu } = require("electron")
 const noblox = require("noblox.js");
 const rpc = require("discord-rpc");
 const path = require("path");
@@ -13,13 +13,15 @@ const {readLocalData, writeLocalData} = require("./utils/localData");
 const sendDataQueue = [];
 const COOKIE_BOT_DEBOUNCE_TIME = 800;
 
+let tray = null;
 let shouldHideProfile = false;
 let isPlaying = false;
 let lastId;
 let mainWindow;
 let robloxId;
+let robloxUsername;
 
-const iconPath = path.join(__dirname, "./icons/logo.png");
+const iconPath = path.join(__dirname, "./images/logo.png");
 const gotTheLock = app.requestSingleInstanceLock();
 
 const client = new rpc.Client({
@@ -59,7 +61,23 @@ const rpcReadyPromise = new Promise(async (resolve, reject) => {
   // Register an event listener for the "rpc-ready" event
   try {
     console.log("Inside rpc ready promise")
-    client.on("ready", () => {
+    client.on("ready", async () => {
+      tray = new Tray(iconPath)
+      tray.setToolTip("Roblox Discord Rich Presence")
+      const ctxMenu = await initCtxMenu()
+      tray.setContextMenu(ctxMenu)
+
+      tray.on("right-click", () => {
+        console.log("Tray button right clicked.")
+        console.log({trayType: typeof tray})
+        tray.popUpContextMenu()
+      })
+
+      tray.on("click", async () => {
+        mainWindow.show()
+      })
+
+
       console.log("-".repeat(30));
       console.log("Discord RPC Ready");
       console.log("-".repeat(30));
@@ -86,26 +104,41 @@ async function initRobloxPresence(cookie) {
       await noblox.setCookie(cookie)
 
       setInterval(async () => {
-          const placeId = await getPlaceId(robloxId)
-          console.log({placeId})
-          const isInDifferentGame = (lastId !== placeId)
-  
-          if (placeId === -1) {
-              console.log("Not in a game, clearing presence.")
-              await client.clearActivity()
-              isPlaying = false
-  
-              // they were previously in a game
-              if (lastId) {
-                  console.log("PREVIOUSLY IN GAME, CLEAR THE BROWSER")
-                  lastId = null
-                  await sendDataToRenderer("clearGameDetails")
-              }
+
+          if (!robloxId | !robloxUsername) {
+            console.log("User ROBLOX data has not been retrieved yet.")
+            return
           }
+
+          const placeId = await getPlaceId(robloxId)
+          
+          const notInGame = placeId === -1
+          const hasSwitchedGames = lastId !== placeId
+          console.log({placeId})
+          
+          if (placeId === null) {
+            console.log("Could not check user presence. Trying again. (error)")
+            return
+          } 
+          
+          if (notInGame) {
+            console.log("Presence has not found any game data.")
+            await client.clearActivity()
+            isPlaying = false
+            
+            // they were previously in a game
+            if (lastId) {
+              console.log("Previously in a game, clearing browser.")
+              lastId = null
+              await sendDataToRenderer("clearGameDetails")
+            }
+            return
+          }
+          
   
-          else if (!isPlaying && placeId !== -1 || isInDifferentGame) {
+        if (!isPlaying || hasSwitchedGames) {
               console.log(`User in ${placeId}`)
-              const placeData = await setPresence(client, placeId, shouldHideProfile)
+              const placeData = await setPresence(client, placeId, shouldHideProfile, robloxId, robloxUsername)
                   .catch(err => console.error(err))
               console.log("Updated presence")
               lastId = placeId
@@ -127,7 +160,7 @@ async function initRobloxPresence(cookie) {
   return true
 }
 
-async function renderProfileData() {
+async function setProfileData() {
   const discordUser = `@${client.user.username}`
   const discordId = client.user.id
   const data = await findRobloxInfo(discordId)
@@ -141,6 +174,8 @@ async function renderProfileData() {
   else {
       console.log("Found Bloxlink details", data)
       robloxId = data.robloxId
+      robloxUsername = data.robloxUsername
+      
       const robloxAvatar = await noblox.getPlayerThumbnail(data.robloxId)
       const userData = { roblox: { user: data.robloxUsername, id: data.robloxId, avatar: robloxAvatar[0].imageUrl }, discord: { user: discordUser, id: discordId } }
       await sendDataToRenderer("userDetails", userData)
@@ -169,9 +204,10 @@ async function createWindow() {
     });
 
     // Handle window closed event
-    mainWindow.on("closed", () => {
-        mainWindow = null;
-        app.quit();
+    mainWindow.on("close", (event) => {
+      // prevent default close
+      event.preventDefault();
+      mainWindow.hide(); 
     });
 }
 
@@ -196,7 +232,7 @@ const debouncedBotCookieHandler = debounce(async (event, data) => {
     writeLocalData({cookie: data.cookie})
     await sendDataToRenderer("removeElement", {id: "cookie-container"})
     // Start bloxlink and render discord and roblox info to page.
-    renderProfileData()
+    setProfileData()
     return true
   }
 
@@ -210,6 +246,27 @@ const debouncedBotCookieHandler = debounce(async (event, data) => {
   return false
 }, COOKIE_BOT_DEBOUNCE_TIME)
 
+const initCtxMenu = () => {
+  const template = [
+    {
+      label: "Open ROBLOX RPC",
+      click: async () => mainWindow.show()
+    },
+    {
+      label: "❌ Quit",
+      click: async () => {
+          await tray.destroy()
+          mainWindow.destroy()
+      }
+    },
+  ];
+
+  const ctxMenu = Menu.buildFromTemplate(template);
+
+  return ctxMenu;
+};
+
+
 
 // App ready event handler
 app.whenReady().then(async () => {
@@ -221,7 +278,7 @@ app.whenReady().then(async () => {
 
     if (!gotTheLock) {
         // "Application already open"
-        app.quit();
+        return app.exit();
     }
 
 
@@ -251,7 +308,7 @@ app.whenReady().then(async () => {
           console.log("Trying to render profile data and roblox presence.")
           const isValidCookie = await initRobloxPresence(cookie) 
           if (isValidCookie) {
-            await renderProfileData() // bloxlink and discord data on screen
+            await setProfileData() // bloxlink and discord data on screen
           }
           // previously valid cookie now expired.
           else {
