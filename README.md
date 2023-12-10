@@ -4,7 +4,7 @@
 
 ### Download the latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) of ROBLOX RPC.
 
----
+## ![Discord Banner](https://discordapp.com/api/guilds/1149469425968361523/widget.png?style=banner2)
 
 **ROBLOX RPC** integrates Discord Rich Presence with the ROBLOX API to find the current game on ROBLOX you're playing.
 
@@ -104,7 +104,6 @@ _If you want to create your own exe, use `npm run make` and **electron-forge** s
   - To exit, **right-click** the icon to view the context menu and choose the "❌ Quit" button.
 
     <img src="https://github.com/ItzBlinkzy/roblox-rpc/assets/68260779/b072bd5c-7821-45ca-b6a5-29e9dc94e60f" alt="installation" width="180" height="90"/>
-
 
 - **_Can I use this on MacOS?_**
 
