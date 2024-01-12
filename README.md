@@ -116,6 +116,7 @@ If you come across any problems using ROBLOX RPC feel free to ask help in the [D
 ## Credits
 
 - [ItzBlinkzy](https://github.com/ItzBlinkzy/)
+- [DarthMDev](https://github.com/DarthMDev/)
   - You can be here too if you'd like to contribute.
 
 ## License
