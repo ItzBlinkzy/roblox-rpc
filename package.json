@@ -32,6 +32,7 @@
     },
     "appId": "com.itzblinkzy.robloxrpc",
     "productName": "roblox-rpc",
+    "icon": "./images/logo.ico",
     "win": {
       "target": "nsis"
     },

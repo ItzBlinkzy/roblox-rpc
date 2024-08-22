@@ -391,14 +391,14 @@ autoUpdater.on("error", (info) => {
   logError(info)
 })
 
-autoUpdater.on("update-available", async () => {
-  await sendDataToRenderer("notification",  { type: "warning", message: "There is a new update available. Attempting to download new update." })
+autoUpdater.on("update-available", async (info) => {
+  await sendDataToRenderer("notification",  { type: "warning", message: `New version (v${info.version}) is available. Now attempting to download it.` })
   autoUpdater.downloadUpdate()
   logError("update available downloading update")
 })
 
-autoUpdater.on('update-downloaded', async () => {
-  await sendDataToRenderer('notification', { type: "success", message: "The new version has been downloaded, please restart the application." });
+autoUpdater.on('update-downloaded', async (info) => {
+  await sendDataToRenderer('notification', { type: "success", message: `Successfully downloaded (v${info.version}). Please restart the application.` });
   logError("downloaded new update")
 });
 
