@@ -1,15 +1,12 @@
 {
   "name": "roblox-rpc",
   "productName": "roblox-rpc",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Integrating ROBLOX with Discord Rich Presence",
   "main": "./main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "dev": "electron .",
+    "dist": "electron-builder"
   },
   "keywords": [],
   "author": {
@@ -19,9 +16,28 @@
   "dependencies": {
     "discord-rpc": "^4.0.1",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^6.2.1",
     "noblox.js": "^4.14.1",
     "node-fetch": "^2.6.6",
     "semver": "^7.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ItzBlinkzy/roblox-rpc"
+  },
+  "build": {
+    "publish": {
+      "provider": "github",
+      "releaseType": "release"
+    },
+    "appId": "com.itzblinkzy.robloxrpc",
+    "productName": "roblox-rpc",
+    "win": {
+      "target": "nsis"
+    },
+    "directories": {
+      "output": "dist"
+    }
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.1",

@@ -7,8 +7,16 @@ const { findRobloxInfo } = require("./utils/findRobloxInfo");
 const { setPresence } = require("./utils/setPresence");
 const { clientId } = require("./config.json");
 const { isOutdatedVersion, getClientVersion, getLatestVersion } = require("./utils/checkVersion");
-const {readLocalData, writeLocalData} = require("./utils/localData");
+const {readLocalData, writeLocalData, logError} = require("./utils/localData");
+const {autoUpdater, AppUpdater} = require("electron-updater")
 
+autoUpdater.autoDownload = false
+
+autoUpdater.setFeedURL({
+  "provider": "github",
+  "owner": "ItzBlinkzy",
+  "repo": "roblox-rpc"
+})
 
 const sendDataQueue = [];
 const COOKIE_BOT_DEBOUNCE_TIME = 800;
@@ -74,7 +82,7 @@ const rpcReadyPromise = new Promise(async (resolve, reject) => {
       })
 
       tray.on("click", async () => {
-        mainWindow.show()
+        await mainWindow.show()
       })
 
 
@@ -294,6 +302,8 @@ app.whenReady().then(async () => {
         await rpcReadyPromise
         await sendDataToRenderer("removeElement", {id: "rpc-loading"})
         await sendDataToRenderer("enableButton", {})
+        // Check for new ROBLOX RPC updates from GitHub.
+        await autoUpdater.checkForUpdates()
         
 
         const localData = readLocalData() 
@@ -348,6 +358,7 @@ app.whenReady().then(async () => {
       }
       catch (err) {
         console.error(err)
+        logError(err)
         await sendDataToRenderer("notification", { type: "error", message: "Could not connect to client. Please try restarting discord before running this application. Contact @bigblinkzy if this persists." })
         await sendDataToRenderer("printError", err)
         await sendDataToRenderer("removeElement", {id: "rpc-loading"})
@@ -356,20 +367,41 @@ app.whenReady().then(async () => {
       const clientVersion = await getClientVersion()
       const latestVersion = await getLatestVersion()
       const isOutdated = isOutdatedVersion(latestVersion, clientVersion)
-
+      
       if (isOutdated) {
         await sendDataToRenderer("notification", { type: "error", message: `A new version is available (${latestVersion}). This version may be broken. Visit https://github.com/ItzBlinkzy/roblox-rpc` })
       }
       await sendDataToRenderer("updateVersion", { version: clientVersion })
-
+      
       process.on("uncaughtException", async (err) => {
         await sendDataToRenderer("notification", { type: "error", message: "An uncaughtException has occured in the main process. Please try again. Contact @bigblinkzy if this persists." })
         await sendDataToRenderer("printError", err)
+        logError(err)
       })
+      
+      process.on("unhandledRejection", async (err) => {
+        await sendDataToRenderer("notification", { type: "error", message: "An unhandledRejection has occured in the main process. Please try again. Contact @bigblinkzy if this persists." })
+        await sendDataToRenderer("printError", err)
+        logError(err)
+      })
+    })  
+  });
+  
+autoUpdater.on("error", (info) => {
+  logError(info)
+})
 
-    process.on("unhandledRejection", async (err) => {
-      await sendDataToRenderer("notification", { type: "error", message: "An unhandledRejection has occured in the main process. Please try again. Contact @bigblinkzy if this persists." })
-      await sendDataToRenderer("printError", err)
-    })
-  })  
+autoUpdater.on("update-available", async () => {
+  await sendDataToRenderer("notification",  { type: "warning", message: "There is a new update available. Attempting to download new update." })
+  autoUpdater.downloadUpdate()
+  logError("update available downloading update")
+})
+
+autoUpdater.on('update-downloaded', async () => {
+  await sendDataToRenderer('notification', { type: "success", message: "The new version has been downloaded, please restart the application." });
+  logError("downloaded new update")
 });
+
+autoUpdater.on("download-progress", (info) => {
+  logError(info.percent)
+})

@@ -22,7 +22,14 @@ function writeLocalData(data) {
   fs.writeFileSync(USER_DATA_PATH, JSON.stringify({...prevData, ...data}));
 }
 
+function logError(error) {
+  const logFile = path.join(app.getPath('userData'), 'error.log');
+  const errorMessage = `[${new Date().toISOString()}] ${error.stack || error}\n${"-".repeat(30)}\n`;
+  fs.appendFileSync(logFile, errorMessage);
+}
+
 module.exports = {
   readLocalData,
-  writeLocalData
+  writeLocalData,
+  logError
 }
