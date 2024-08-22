@@ -1,10 +1,10 @@
 <img src="https://user-images.githubusercontent.com/68260779/208254746-0055f6a3-2510-426c-b5c2-b3b6ad85715e.png" alt="logo" width="125"/>
 
 # ROBLOX RPC
+<a href="https://discord.com/invite/aq9rwUCQrK"><img src="https://discordapp.com/api/guilds/1149469425968361523/widget.png?style=banner3" alt="Discord Banner"/></a>
 
 ### Download the latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) of ROBLOX RPC.
 
-## ![Discord Banner](https://discordapp.com/api/guilds/1149469425968361523/widget.png?style=banner2)
 
 **ROBLOX RPC** integrates Discord Rich Presence with the ROBLOX API to find the current game on ROBLOX you're playing.
 
@@ -116,6 +116,7 @@ If you come across any problems using ROBLOX RPC feel free to ask help in the [D
 ## Credits
 
 - [ItzBlinkzy](https://github.com/ItzBlinkzy/)
+- [DarthMDev](https://github.com/DarthMDev/)
   - You can be here too if you'd like to contribute.
 
 ## License
