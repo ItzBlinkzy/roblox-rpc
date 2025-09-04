@@ -1,10 +1,16 @@
 <img src="https://user-images.githubusercontent.com/68260779/208254746-0055f6a3-2510-426c-b5c2-b3b6ad85715e.png" alt="logo" width="125"/>
 
 # ROBLOX RPC
+
+> **⚠️ PROJECT STATUS: NO LONGER MAINTAINED**
+> 
+> Discord has officially added native Roblox Rich Presence integration, making this application redundant. While ROBLOX RPC will continue to function for now, there's no longer a need to use it once Discord's native feature becomes available to all users.
+> 
+> **This project is now considered complete and will no longer receive updates or maintenance.**
+
 <a href="https://discord.com/invite/aq9rwUCQrK"><img src="https://discordapp.com/api/guilds/1149469425968361523/widget.png?style=banner3" alt="Discord Banner"/></a>
 
 ### Download the latest [release](https://github.com/ItzBlinkzy/roblox-rpc/releases) of ROBLOX RPC.
-
 
 **ROBLOX RPC** integrates Discord Rich Presence with the ROBLOX API to find the current game on ROBLOX you're playing.
 
@@ -111,7 +117,9 @@ _If you want to create your own exe, use `npm run make` and **electron-forge** s
 
 ## Issues
 
-If you come across any problems using ROBLOX RPC feel free to ask help in the [Discord Server](https://discord.com/invite/aq9rwUCQrK) or submit an [issue](https://github.com/ItzBlinkzy/roblox-rpc/issues).
+~~If you come across any problems using ROBLOX RPC feel free to ask help in the [Discord Server](https://discord.com/invite/aq9rwUCQrK) or submit an [issue](https://github.com/ItzBlinkzy/roblox-rpc/issues).~~
+
+**Note: As this project is no longer maintained, no new issues will be addressed. The application will continue to function as-is until Discord's native Roblox integration becomes widely available.**
 
 ## Credits
 
