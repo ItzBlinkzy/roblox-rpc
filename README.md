@@ -2,11 +2,11 @@
 
 # ROBLOX RPC
 
-> **⚠️ PROJECT STATUS: NO LONGER MAINTAINED**
+> **⚠️ PROJECT STATUS: NO LONGER UPDATING REGULARLY**
 > 
 > Discord has officially added native Roblox Rich Presence integration, making this application redundant. While ROBLOX RPC will continue to function for now, there's no longer a need to use it once Discord's native feature becomes available to all users.
 > 
-> **This project is now considered complete and will no longer receive updates or maintenance.**
+> **This project is now considered complete and will ONLY receive updates on API breaking changes**
 
 <a href="https://discord.com/invite/aq9rwUCQrK"><img src="https://discordapp.com/api/guilds/1149469425968361523/widget.png?style=banner3" alt="Discord Banner"/></a>
 
